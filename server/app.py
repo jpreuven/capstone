@@ -10,6 +10,8 @@ from werkzeug.exceptions import Unauthorized
 import re
 from datetime import datetime
 from dateutil import relativedelta
+from sqlalchemy.orm import joinedload
+from sqlalchemy import desc
 
 # Local imports
 from config import app, db, api
@@ -17,14 +19,14 @@ from config import app, db, api
 
 
 # Views go here!
-@app.before_request
-def check_if_logged_in ():
-    open_access = ["login", "signup", "logout"]
-    if request.endpoint not in open_access and not session.get("user_id"):
-        print(request.endpoint)
-        print("Checking if")
-        raise Unauthorized
-        return {'error': 'Unauthorized'}, 401
+# @app.before_request
+# def check_if_logged_in ():
+#     open_access = ["login", "signup", "logout"]
+#     if request.endpoint not in open_access and not session.get("user_id"):
+#         print(request.endpoint)
+#         print("Checking if")
+#         raise Unauthorized
+#         return {'error': 'Unauthorized'}, 401
 
 class Signup(Resource):
     def post(self):
@@ -90,8 +92,24 @@ api.add_resource(Logout, "/logout")
 
 class Users(Resource):
     def get(self):
-        users = [user.to_dict() for user in User.query.all()]
-        return make_response(users, 200)
+        users = (
+            User.query
+            .outerjoin(User.properties)
+            .outerjoin(Property.leases)
+            .outerjoin(Lease.bills)
+            .order_by(desc(Bill.date))
+            .options(joinedload(User.properties))
+            .all()
+        )
+        # users = (
+        #     User.query
+        #     .order_by(desc(User.properties.leases.bills.date))
+        #     .all()
+        # )
+        users_data = [user.to_dict() for user in users]
+
+        # users = [user.to_dict() for user in User.query.all()]
+        return make_response(users_data, 200)
 
 
 api.add_resource(Users, "/users")
@@ -120,7 +138,7 @@ api.add_resource(Leases, "/leases")
 
 class Bills(Resource):
     def get(self):
-        bills = [bill.to_dict() for bill in Bill.query.all()]
+        bills = [bill.to_dict() for bill in Bill.query.order_by(desc(Bill.date)).all()]
         return make_response(bills, 200)
 
 api.add_resource(Bills, "/bills")
