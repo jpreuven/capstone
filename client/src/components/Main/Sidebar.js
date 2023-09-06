@@ -77,7 +77,8 @@ export default function SimpleSidebar() {
         bg={useColorModeValue("black", "gray.900")}
         borderRight="1px"
         borderRightColor={useColorModeValue("gray.200", "gray.700")}
-        w={{ base: "full", md: 60 }}
+        // w={{ base: "full", md: 60 }}
+        w="15%"
         pos="fixed"
         h="full"
         {...rest}
@@ -96,7 +97,7 @@ export default function SimpleSidebar() {
             onClick={onClose}
           />
         </Flex>
-        <Box mt={16}>
+        <Box mt={20}>
           {LinkItems.map((link) => (
             <NavItem
               color="white"

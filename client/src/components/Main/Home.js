@@ -23,22 +23,57 @@ import {
   Td,
   TableCaption,
   TableContainer,
-  // Center,
 } from "@chakra-ui/react";
-// import { Center, Square, Circle } from '@chakra-ui/react'
+import { current } from "@reduxjs/toolkit";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
+
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
 
 export default function Home() {
   const chartRef = useRef();
 
   const user = useSelector((state) => state.user.value);
-  console.log(user);
-
-  const bills_to_display = user.properties.flatMap((property) => {
+  // console.log(user);
+  const tenant_info = user[0].ordered_bills.map((bill) => {
+    const current_payment =
+      bill.payments.length > 0 ? bill.payments[0]?.amount : "-";
+    const current_date =
+      bill.payments.length > 0 ? convertDate(bill.payments[0]?.date_paid) : "-";
+    const current_charge =
+      bill.charges.length > 0 ? bill.charges[0]?.amount : "-";
+    return {
+      // charges: `${bill.charges[0].amount}`,
+      charges: `${current_charge}`,
+      payments: `${current_payment}`,
+      property: `${bill.lease.property.address}`,
+      tenant: `${bill.lease.tenant.first_name} ${bill.lease.tenant.last_name}`,
+      date: `${current_date}`,
+    };
+  });
+  // console.log(tenant_info);
+  const tenantInfoJSX = tenant_info.map((bill) => {
+    return (
+      <Tr key={getRandomInt(9999999999)}>
+        <Td>${bill.charges}</Td>
+        <Td>${bill.payments}</Td>
+        <Td>{bill.tenant}</Td>
+        <Td>{bill.date}</Td>
+        <Td>{bill.property}</Td>
+      </Tr>
+    );
+  });
+  // const payment_to_display = tenant_info.map((tenant) => {});
+  const bills_to_display = user[0].properties.flatMap((property) => {
     const data = property.leases.map((lease) => {
       const bill = lease.bills.map((bill) => {
-        return bill.payments[0].amount;
+        if (bill.payments.length > 0) {
+          return bill.payments[0]?.amount;
+        } else {
+          return 0;
+        }
       });
       let sum = bill.reduce(function (x, y) {
         return parseInt(x) + parseInt(y);
@@ -50,33 +85,11 @@ export default function Home() {
   });
   // console.log(bills_to_display);
 
-  const leases = user.properties.flatMap((property) => {
-    const data = property.leases.map((lease) => {
-      const bills = lease.bills.map((bill) => {
-        return (
-          <Tr key={bill.id}>
-            <Td>${bill.charges[0].amount}</Td>
-            <Td>${bill.payments[0].amount}</Td>
-            <Td>
-              {lease.tenant.first_name} {lease.tenant.last_name}
-            </Td>
-            <Td>{convertDate(bill.date)}</Td>
-            <Td>{property.address}</Td>
-          </Tr>
-        );
-      });
-      return bills;
-    });
-    return data;
-  });
-
   const data = {
-    // labels: ["First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh"],
     labels: bills_to_display.map((bill) => bill[0]),
     datasets: [
       {
-        label: "$",
-        // data: [12, 19, 3, 5, 2, 3],
+        label: "Total $",
         data: bills_to_display.map((bill) => bill[1]),
 
         backgroundColor: [
@@ -102,78 +115,10 @@ export default function Home() {
     ],
   };
 
-  // const leases = user.properties.flatMap((property) => {
-  //   const data = property.leases.flatMap((lease) => {
-  //     const bills = lease.bills;
-  //     // const sorted_bills = [...bills].sort((a, b) => {
-  //     //   // const a_slice = a.date.slice(0, 10);
-  //     //   // const a_split = a_slice.split("-");
-  //     //   // const a_date = new Date(a_split[0], a_split[1], a_split[2]);
-  //     //   const a_slice = a.date.slice(0, 10);
-  //     //   const a_split = a_slice.split("-");
-  //     //   const a_year = parseInt(a_split[0]);
-  //     //   const a_month = parseInt(a_split[1]) - 1; // Subtract 1 for zero-based months
-  //     //   const a_day = parseInt(a_split[2]);
-  //     //   const a_date = new Date(a_year, a_month, a_day);
-
-  //     //   const b_slice = b.date.slice(0, 10);
-  //     //   const b_split = b_slice.split("-");
-  //     //   const b_year = parseInt(b_split[0]);
-  //     //   const b_month = parseInt(b_split[1]) - 1; // Subtract 1 for zero-based months
-  //     //   const b_day = parseInt(b_split[2]);
-  //     //   const b_date = new Date(b_year, b_month, b_day);
-
-  //     //   return a_date - b_date;
-  //     // });
-  //     const new_bills = lease.bills.map((bill) => {
-  //       return (
-  //         // <div key={bill.id}>
-  //         {
-  //           Bills: `${bill.charges[0].amount}`,
-  //           Payments: `${bill.payments[0].amount}`,
-  //           Tenant: `${lease.tenant.first_name} ${lease.tenant.last_name}`,
-  //           Date: `${Date.parse(bill.date.replace(" ", "T"))}`,
-  //           Property: `${property.address}`,
-  //         }
-  //         // </div>
-  //       );
-  //     });
-  //     return new_bills.sort((a, b) => {
-  //       return parseInt(b.Date) - parseInt(a.Date);
-  //     });
-  //     // const sorted_bills = [...bills].sort((a, b) => {
-  //     //   // Parse date strings in "YYYY-MM-DD HH:mm:ss" format
-  //     //   const timestampA = Date.parse(a.date.replace(" ", "T"));
-  //     //   const timestampB = Date.parse(b.date.replace(" ", "T"));
-
-  //     //   // Extract year and month from the date strings
-  //     //   const yearA = new Date(a.date).getFullYear();
-  //     //   const monthA = new Date(a.date).getMonth();
-  //     //   const yearB = new Date(b.date).getFullYear();
-  //     //   const monthB = new Date(b.date).getMonth();
-
-  //     //   // Compare bills by year and month first, then by timestamp (descending)
-  //     //   if (yearA === yearB) {
-  //     //     if (monthA === monthB) {
-  //     //       return timestampB - timestampA; // Compare timestamps within the same month
-  //     //     } else {
-  //     //       return monthB - monthA; // Compare months within the same year
-  //     //     }
-  //     //   } else {
-  //     //     return yearB - yearA; // Compare years
-  //     //   }
-  //     // });
-  //     // return sorted_bills;
-  //   });
-  //   return data;
-  // });
-  // console.log(leases);
-
   return (
-    <Box ml={250} display="flex" flexDirection="column" alignItems="center">
-      <h1>Home page</h1>
+    <Box ml="10%" display="flex" flexDirection="column" alignItems="center">
       <Box
-        width={750}
+        width="60%"
         height={750}
         display="flex"
         justifyContent="center"
@@ -186,30 +131,39 @@ export default function Home() {
         />
       </Box>
       <Box
-        width={1500}
-        // style={{ backgroundColor: "rgba(100, 162, 235, 0.1)" }}
+        width="90%"
         display="flex"
         flexDirection="column"
         alignItems="center"
+        mt={16}
+        mb={16}
       >
         <Box
-          width={1300}
-          // // style={{ backgroundColor: "rgba(100, 162, 235, 0.1)" }}
-          // overflow-x="scroll"
+          width="80%"
           height={1500}
           style={{ overflowX: "scroll", overflowX: "hidden" }}
         >
           <Table>
             <Thead>
               <Tr>
-                <Th>Charges:</Th>
-                <Th>Payments:</Th>
-                <Th>Tenant:</Th>
-                <Th>Date:</Th>
-                <Th>Property:</Th>
+                <Th style={{ position: "sticky", top: 0, background: "white" }}>
+                  Charges:
+                </Th>
+                <Th style={{ position: "sticky", top: 0, background: "white" }}>
+                  Payments:
+                </Th>
+                <Th style={{ position: "sticky", top: 0, background: "white" }}>
+                  Tenant:
+                </Th>
+                <Th style={{ position: "sticky", top: 0, background: "white" }}>
+                  Date:
+                </Th>
+                <Th style={{ position: "sticky", top: 0, background: "white" }}>
+                  Property:
+                </Th>
               </Tr>
             </Thead>
-            <Tbody>{leases}</Tbody>
+            <Tbody>{tenantInfoJSX}</Tbody>
           </Table>
         </Box>
       </Box>

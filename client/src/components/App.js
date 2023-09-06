@@ -30,7 +30,6 @@ function App() {
         r.json().then((user) => {
           dispatch(setUser(user));
           setLoading(false);
-          // console.log(user);
         });
       } else {
         setLoading(false);
