@@ -108,21 +108,6 @@ api.add_resource(Logout, "/logout")
 
 class Users(Resource):
     def get(self):
-        # users = (
-        #     User.query
-        #     .outerjoin(User.properties)
-        #     .outerjoin(Property.leases)
-        #     .outerjoin(Lease.bills)
-        #     .order_by(desc(Bill.date))
-        #     # .options(joinedload(User.properties))
-        #     .all()
-        # )
-        # users = (
-        #     User.query
-        #     .order_by(desc(User.properties.leases.bills.date))
-        #     .all()
-        # )
-        # users_data = [user.to_dict() for user in users]
         users = User.query.all()
         user_list = []
         for user in users:
@@ -131,9 +116,6 @@ class Users(Resource):
             user_dict['ordered_bills'] = ordered_bills
             user_list.append(user_dict)
         return make_response(user_list, 200)
-
-        # users = [user.to_dict() for user in User.query.all()]
-        # return make_response(users_data, 200)
 
 
 api.add_resource(Users, "/users")
@@ -152,6 +134,15 @@ class Tenants(Resource):
         return make_response(tenants, 200)
 
 api.add_resource(Tenants, "/tenants")
+
+class TenantByID(Resource):
+    def get(self, id):
+        tenant = Tenant.query.filter(Tenant.id == id).first()
+        if not tenant:
+            return make_response({"error": "Tenant not found"}, 404)
+        return make_response(tenant.to_dict(), 200)
+
+api.add_resource(TenantByID, "/tenants/<int:id>")
 
 class Leases(Resource):
     def get(self):
