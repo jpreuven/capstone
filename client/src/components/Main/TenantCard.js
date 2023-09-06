@@ -49,7 +49,6 @@ export default function TenantCard({
         onClick={handleTenantPage}
       >
         <Box p={6}>
-          <br />
           <Stack spacing={0} align={"center"} mb={5}>
             <Heading fontSize={"2xl"} fontWeight={500} fontFamily={"body"}>
               {first_name} {last_name}
