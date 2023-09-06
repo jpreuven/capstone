@@ -64,7 +64,16 @@ class Login(Resource):
         password = request.get_json()["password"]
         if user.authenticate(password):
             session["user_id"] = user.id
-            return user.to_dict()
+            # return user.to_dict()
+        
+        # new_users = User.query.all()
+            user_list = []
+            # for user in user:
+            ordered_bills = [bill.to_dict() for bill in user.get_ordered_bills()]
+            user_dict = user.to_dict(rules=("-bills",))
+            user_dict['ordered_bills'] = ordered_bills
+            user_list.append(user_dict)
+            return make_response(user_list, 200)
 
         return {"error": "Invalid username or password"}, 401
 
@@ -74,7 +83,14 @@ class CheckSession(Resource):
     def get(self):
         user = User.query.filter(User.id == session.get("user_id")).first()
         if user:
-            return user.to_dict()
+            # return user.to_dict()
+            user_list = []
+            # for user in user:
+            ordered_bills = [bill.to_dict() for bill in user.get_ordered_bills()]
+            user_dict = user.to_dict(rules=("-bills",))
+            user_dict['ordered_bills'] = ordered_bills
+            user_list.append(user_dict)
+            return make_response(user_list, 200)
 
         else:
             return {"message": "401: Not Authorized"}, 401
@@ -92,24 +108,32 @@ api.add_resource(Logout, "/logout")
 
 class Users(Resource):
     def get(self):
-        users = (
-            User.query
-            .outerjoin(User.properties)
-            .outerjoin(Property.leases)
-            .outerjoin(Lease.bills)
-            .order_by(desc(Bill.date))
-            .options(joinedload(User.properties))
-            .all()
-        )
+        # users = (
+        #     User.query
+        #     .outerjoin(User.properties)
+        #     .outerjoin(Property.leases)
+        #     .outerjoin(Lease.bills)
+        #     .order_by(desc(Bill.date))
+        #     # .options(joinedload(User.properties))
+        #     .all()
+        # )
         # users = (
         #     User.query
         #     .order_by(desc(User.properties.leases.bills.date))
         #     .all()
         # )
-        users_data = [user.to_dict() for user in users]
+        # users_data = [user.to_dict() for user in users]
+        users = User.query.all()
+        user_list = []
+        for user in users:
+            ordered_bills = [bill.to_dict() for bill in user.get_ordered_bills()]
+            user_dict = user.to_dict(rules=("-bills",))
+            user_dict['ordered_bills'] = ordered_bills
+            user_list.append(user_dict)
+        return make_response(user_list, 200)
 
         # users = [user.to_dict() for user in User.query.all()]
-        return make_response(users_data, 200)
+        # return make_response(users_data, 200)
 
 
 api.add_resource(Users, "/users")
@@ -138,7 +162,9 @@ api.add_resource(Leases, "/leases")
 
 class Bills(Resource):
     def get(self):
+        # bills = [bill.to_dict() for bill in Bill.query.filter(Bill.id == session["user_id"]).order_by(desc(Bill.date)).all()]
         bills = [bill.to_dict() for bill in Bill.query.order_by(desc(Bill.date)).all()]
+
         return make_response(bills, 200)
 
 api.add_resource(Bills, "/bills")

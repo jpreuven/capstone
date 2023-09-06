@@ -3,6 +3,7 @@ from sqlalchemy.ext.associationproxy import association_proxy
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import validates
 from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy import desc
 
 from config import db, bcrypt
 
@@ -22,6 +23,10 @@ class User(db.Model, SerializerMixin):
 
     properties = db.relationship("Property", back_populates="user", cascade="delete") 
     tenants = db.relationship("Tenant", back_populates="user", cascade="delete") 
+
+    def get_ordered_bills(self):
+        ordered_bills = Bill.query.join(Lease).join(Property).filter(Property.user_id == self.id).order_by(desc(Bill.date)).all()
+        return ordered_bills
 
 
     def __repr__ (self):

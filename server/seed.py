@@ -98,6 +98,10 @@ if __name__ == '__main__':
                 db.session.add(payment)
                 db.session.add(charge)
                 month += 1
+        test_bill = Bill(date=datetime(2024, 1, 1), lease_id = 3)
+        db.session.add(test_bill)
+        test_charge = Charge(type_of_charge="rent", amount = 700, bill_id = 85)
+        db.session.add(test_charge)
 
         db.session.commit()
         # Seed code goes here!
