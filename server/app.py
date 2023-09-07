@@ -243,6 +243,14 @@ api.add_resource(Bills, "/bills")
 class Charges (Resource):
     def post(self):
         data = request.get_json()
+        try:
+            new_charge = Charge(**data)
+        except ValueError as e:
+            abort(422, e.args[0])
+        db.session.add(new_charge)
+        db.session.commit()
+
+        return make_response(new_charge.to_dict(), 201)
         
         # try:
         #     new_bill = Bill(date=bill_date, lease_id = data["lease_id"])
@@ -252,6 +260,8 @@ class Charges (Resource):
         # db.session.commit()
 
         # return make_response(new_bill.to_dict(), 201)
+api.add_resource(Charges, "/charges")
+
 
 class TEST(Resource):
     def get(self):
