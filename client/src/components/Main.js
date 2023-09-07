@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { Switch, Route } from "react-router-dom";
 import Home from "./Main/Home";
 import Properties from "./Main/Properties";
@@ -7,7 +7,7 @@ import Tenants from "./Main/Tenants";
 
 export default function Main() {
   return (
-    <div>
+    <Fragment>
       <Switch>
         <Route exact path="/">
           <Home />
@@ -22,6 +22,6 @@ export default function Main() {
           <Properties />
         </Route>
       </Switch>
-    </div>
+    </Fragment>
   );
 }

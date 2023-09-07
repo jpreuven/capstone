@@ -38,8 +38,9 @@ export default function Home() {
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user.value);
-  // console.log(user);
-  const tenant_info = user[0].ordered_bills.map((bill) => {
+  console.log(user);
+  let tenant_info;
+  tenant_info = user[0].ordered_bills.map((bill) => {
     const current_payment =
       bill.payments.length > 0 ? bill.payments[0]?.amount : "-";
     const current_date =
