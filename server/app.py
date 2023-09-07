@@ -135,6 +135,24 @@ class Properties(Resource):
 
 api.add_resource(Properties, "/properties")
 
+class PropertiesByID(Resource):
+    def get(self, id):
+        property = Property.query.filter(Property.id == id).first()
+        if not property:
+            return make_response({"error": "Property not found"}, 404)
+        # return make_response(property.to_dict(), 200)
+        if property:
+            user_list = []
+            # for user in user:
+            ordered_bills = [bill.to_dict() for bill in property.get_ordered_bills()]
+            user_dict = property.to_dict(rules=("-leases.bills", ))
+            user_dict['ordered_bills'] = ordered_bills
+            user_list.append(user_dict)
+            return make_response(user_list, 200)
+
+
+api.add_resource(PropertiesByID, "/properties/<int:id>")
+
 class Tenants(Resource):
     def get(self):
         tenants = [tenant.to_dict(rules=("-user.properties",)) for tenant in Tenant.query.all()]
@@ -164,8 +182,38 @@ class Bills(Resource):
         bills = [bill.to_dict() for bill in Bill.query.order_by(desc(Bill.date)).all()]
 
         return make_response(bills, 200)
+    def post(self):
+        data = request.get_json()
+        date = data["date"]
+        # print(data["date"][0:4])
+        year = int(date[0:4])
+        month = int(date[5:7])
+        day = int(date[8:10])
+        bill_date = datetime(year, month, day)
+
+        try:
+            new_bill = Bill(date=bill_date, lease_id = data["lease_id"])
+        except ValueError as e:
+            abort(422, e.args[0])
+        db.session.add(new_bill)
+        db.session.commit()
+
+        return make_response(new_bill.to_dict(), 201)
 
 api.add_resource(Bills, "/bills")
+
+class Charges (Resource):
+    def post(self):
+        data = request.get_json()
+        
+        # try:
+        #     new_bill = Bill(date=bill_date, lease_id = data["lease_id"])
+        # except ValueError as e:
+        #     abort(422, e.args[0])
+        # db.session.add(new_bill)
+        # db.session.commit()
+
+        # return make_response(new_bill.to_dict(), 201)
 
 class TEST(Resource):
     def get(self):

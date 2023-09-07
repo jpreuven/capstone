@@ -72,6 +72,10 @@ class Property(db.Model, SerializerMixin):
     # def tenants_full (self):
     #     return [tenant for tenant in self.tenants] 
 
+    def get_ordered_bills(self):
+        ordered_bills = Bill.query.join(Lease).join(Property).filter(Property.id == self.id).order_by(desc(Bill.date)).all()
+        return ordered_bills
+
 
     def __repr__(self):
         return f'Property: {self.address}'    
