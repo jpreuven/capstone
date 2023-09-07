@@ -127,10 +127,37 @@ class Users(Resource):
 
 api.add_resource(Users, "/users")
 
+class UserByID(Resource):
+    def get(self, id):
+        user = User.query.filter(User.id == id).first()
+        if user:
+            # return user.to_dict()
+            user_list = []
+            # for user in user:
+            ordered_bills = [bill.to_dict() for bill in user.get_ordered_bills()]
+            user_dict = user.to_dict(rules=("-bills",))
+            user_dict['ordered_bills'] = ordered_bills
+            user_list.append(user_dict)
+            return make_response(user_list, 200)
+
+        else:
+            return {"message": "401: Not Authorized"}, 401
+api.add_resource(UserByID, "/users/<int:id>")
+        
+
 class Properties(Resource):
     def get(self):
-        properties = [property.to_dict(rules=("-user.tenants",)) for property in Property.query.all()]
-        return make_response(properties, 200)
+        # properties = [property.to_dict(rules=("-user.tenants",)) for property in Property.query.all()]
+        # return make_response(properties, 200)
+    
+        properties = Property.query.all()
+        property_list = []
+        for property in properties:
+            ordered_leases = [lease.to_dict() for lease in property.get_ordered_leases()]
+            property_dict = property.to_dict(rules=("-leases",))
+            property_dict['ordered_leases'] = ordered_leases
+            property_list.append(property_dict)
+        return make_response(property_list, 200)
 
 
 api.add_resource(Properties, "/properties")
@@ -143,11 +170,22 @@ class PropertiesByID(Resource):
         # return make_response(property.to_dict(), 200)
         if property:
             user_list = []
+            property_list = []
+
             # for user in user:
             ordered_bills = [bill.to_dict() for bill in property.get_ordered_bills()]
-            user_dict = property.to_dict(rules=("-leases.bills", ))
+            ordered_leases = [lease.to_dict() for lease in property.get_ordered_leases()]
+            # user_dict = property.to_dict(rules=("-leases.bills", ))
+            user_dict = property.to_dict(rules=("-leases", ))
+
             user_dict['ordered_bills'] = ordered_bills
+            user_dict['ordered_leases'] = ordered_leases
+
             user_list.append(user_dict)
+            
+            # property_dict = property.to_dict(rules=("-leases",))
+            # property_dict['ordered_leases'] = ordered_leases
+            # property_list.append(property_dict)
             return make_response(user_list, 200)
 
 
