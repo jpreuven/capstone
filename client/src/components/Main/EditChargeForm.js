@@ -20,7 +20,7 @@ import { setTenant } from "../../app/features/tenant/tenantSlice";
 import { setUser } from "../../app/features/users/userSlice";
 import { setChargeForm } from "../../app/features/chargeForm/chargeFormSlice";
 
-export const ChargeForm = ({ toggleChargeForm, setToggleChargeForm }) => {
+export const EditChargeForm = ({ toggleChargeForm, setToggleChargeForm }) => {
   const { id } = useParams();
   const dispatch = useDispatch();
 
@@ -200,4 +200,4 @@ export const ChargeForm = ({ toggleChargeForm, setToggleChargeForm }) => {
   );
 };
 
-export default ChargeForm;
+export default EditChargeForm;

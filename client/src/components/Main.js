@@ -4,6 +4,7 @@ import Home from "./Main/Home";
 import Properties from "./Main/Properties";
 import TenantDetail from "./Main/TenantDetail";
 import Tenants from "./Main/Tenants";
+import PropertyDetail from "./Main/PropertyDetail";
 
 export default function Main() {
   return (
@@ -17,6 +18,9 @@ export default function Main() {
         </Route>
         <Route path="/tenants">
           <Tenants />
+        </Route>
+        <Route path="/properties/:id">
+          <PropertyDetail />
         </Route>
         <Route path="/properties">
           <Properties />
