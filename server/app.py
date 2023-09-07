@@ -240,6 +240,19 @@ class Bills(Resource):
 
 api.add_resource(Bills, "/bills")
 
+class BillByID(Resource):
+    def delete(self, id):
+        bill = Bill.query.filter(Bill.id == id).first()
+        if not bill:
+            abort(404, "Resource not found")
+        db.session.delete(bill)
+        db.session.commit()
+        return make_response("", 204)
+
+
+api.add_resource(BillByID, "/bills/<int:id>")
+
+
 class Charges (Resource):
     def post(self):
         data = request.get_json()
