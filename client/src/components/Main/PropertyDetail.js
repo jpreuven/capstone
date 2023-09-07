@@ -17,9 +17,9 @@ import {
   Th,
   Td,
 } from "@chakra-ui/react";
-import chargeFormSlice, {
-  setChargeForm,
-} from "../../app/features/chargeForm/chargeFormSlice";
+// import chargeFormSlice, {
+//   setChargeForm,
+// } from "../../app/features/chargeForm/chargeFormSlice";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
 import { useSelector, useDispatch } from "react-redux";
@@ -42,7 +42,7 @@ export const PropertyDetail = (props) => {
   const chartRef = useRef();
   const user = useSelector((state) => state.user.value);
   const [toggleChargeForm, setToggleChargeForm] = useState(false);
-  const [toggleEditChargeForm, setToggleEditChargeForm] = useState(false);
+  // const [toggleEditChargeForm, setToggleEditChargeForm] = useState(false);
   const [togglePaymentForm, setTogglePaymentForm] = useState(false);
   const [toggleBillForm, setToggleBillForm] = useState(false);
   const [toggleDeleteBillForm, setToggleDeleteBillForm] = useState(false);
@@ -56,44 +56,44 @@ export const PropertyDetail = (props) => {
   }, []);
 
   function handleToggleChargeForm() {
-    dispatch(setChargeForm(null)); //
+    // dispatch(setChargeForm(null)); //
 
     setTogglePaymentForm(false);
     setToggleBillForm(false);
     setToggleDeleteBillForm(false);
-    setToggleEditChargeForm(false);
+    // setToggleEditChargeForm(false);
 
     setToggleChargeForm(!toggleChargeForm);
   }
 
   function handleTogglePaymentForm() {
-    dispatch(setChargeForm(null)); //
+    // dispatch(setChargeForm(null)); //
 
     setToggleChargeForm(false);
     setToggleBillForm(false);
     setToggleDeleteBillForm(false);
-    setToggleEditChargeForm(false);
+    // setToggleEditChargeForm(false);
 
     setTogglePaymentForm(!togglePaymentForm);
   }
 
   function handleToggleBillForm() {
-    dispatch(setChargeForm(null)); //
+    // dispatch(setChargeForm(null)); //
     setToggleChargeForm(false);
     setTogglePaymentForm(false);
     setToggleDeleteBillForm(false);
-    setToggleEditChargeForm(false);
+    // setToggleEditChargeForm(false);
 
     setToggleBillForm(!toggleBillForm);
   }
 
   function handleToggleDeleteBillForm() {
-    dispatch(setChargeForm(null)); //
+    // dispatch(setChargeForm(null)); //
 
     setToggleChargeForm(false);
     setTogglePaymentForm(false);
     setToggleBillForm(false);
-    setToggleEditChargeForm(false);
+    // setToggleEditChargeForm(false);
 
     setToggleDeleteBillForm(!toggleDeleteBillForm);
   }
@@ -119,52 +119,54 @@ export const PropertyDetail = (props) => {
 
   function handleEditPayments(e) {
     // let editableContent = e.target.innerHTML;
-    handleTogglePaymentForm();
+    // handleTogglePaymentForm();
+    console.log(e);
   }
+  console.log(property);
 
-  function handleEditCharge(
-    amount,
-    chargedFor,
-    bill_id,
-    tenant_id,
-    tenant,
-    date,
-    lease_id,
-    charge_id
-  ) {
-    // setToggleChargeForm
-    const chargeInfo = {
-      amount: amount,
-      chargedFor: chargedFor,
-      bill_id: bill_id,
-      tenant_id: tenant_id,
-      tenant: tenant,
-      date: date,
-      lease_id: lease_id,
-      charge_id: charge_id,
-    };
+  // function handleEditCharge(
+  //   amount,
+  //   chargedFor,
+  //   bill_id,
+  //   tenant_id,
+  //   tenant,
+  //   date,
+  //   lease_id,
+  //   charge_id
+  // ) {
+  //   // setToggleChargeForm
+  //   const chargeInfo = {
+  //     amount: amount,
+  //     chargedFor: chargedFor,
+  //     bill_id: bill_id,
+  //     tenant_id: tenant_id,
+  //     tenant: tenant,
+  //     date: date,
+  //     lease_id: lease_id,
+  //     charge_id: charge_id,
+  //   };
 
-    setTogglePaymentForm(false);
-    setToggleBillForm(false);
-    setToggleDeleteBillForm(false);
-    setToggleEditChargeForm(true);
+  //   setTogglePaymentForm(false);
+  //   setToggleBillForm(false);
+  //   setToggleDeleteBillForm(false);
+  //   setToggleEditChargeForm(true);
 
-    if (toggleChargeForm) {
-      dispatch(setChargeForm(chargeInfo));
-      setToggleChargeForm(false);
+  //   if (toggleChargeForm) {
+  //     dispatch(setChargeForm(chargeInfo));
+  //     setToggleChargeForm(false);
 
-      setToggleChargeForm(true);
+  //     setToggleChargeForm(true);
 
-      console.log("just switch and edit");
-      // console.log(amount, chargedFor, bill_id);
-    }
-    if (!toggleChargeForm) {
-      dispatch(setChargeForm(chargeInfo));
-      setToggleChargeForm(true);
-      console.log("And only now switch and edit");
-      // console.log(amount, chargedFor, bill_id);
-    }
-  }
+  //     console.log("just switch and edit");
+  //     // console.log(amount, chargedFor, bill_id);
+  //   }
+  //   if (!toggleChargeForm) {
+  //     dispatch(setChargeForm(chargeInfo));
+  //     setToggleChargeForm(true);
+  //     console.log("And only now switch and edit");
+  //     // console.log(amount, chargedFor, bill_id);
+  //   }
+  // }
 
   if (property) {
     // currentDate = new Date();
@@ -241,25 +243,30 @@ export const PropertyDetail = (props) => {
           ) : null}
           {bill.charges !== "undefined" ? (
             <Tr key={bill.charge_id + "charge"}>
-              <Td>${bill.charges}</Td>
+              <Td>
+                $
+                <div type="number" contentEditable>
+                  {bill.charges}
+                </div>
+              </Td>
               <Td>-</Td>
               <Td>{bill.tenant}</Td>
               <Td>{bill.charged_for}</Td>
               <Td>{bill.charge_date}</Td>
               <Td>
                 <button
-                  onClick={() =>
-                    handleEditCharge(
-                      bill.charges,
-                      bill.charged_for,
-                      bill.id,
-                      bill.tenant_id,
-                      bill.tenant,
-                      bill.charge_date,
-                      bill.lease_id,
-                      bill.charge_id
-                    )
-                  }
+                  // onClick={() =>
+                  //   handleEditCharge(
+                  //     bill.charges,
+                  //     bill.charged_for,
+                  //     bill.id,
+                  //     bill.tenant_id,
+                  //     bill.tenant,
+                  //     bill.charge_date,
+                  //     bill.lease_id,
+                  //     bill.charge_id
+                  //   )
+                  // }
                   style={{ textAlign: "center" }}
                 >
                   ✎
@@ -323,10 +330,7 @@ export const PropertyDetail = (props) => {
                 maintainAspectRatio: false,
               }}
             />
-            <span>
-              {/* {tenant.first_name} */}
-              's % of total payments
-            </span>
+            <span>{property[0].address} % of total payments</span>
           </Box>
           <Box
             display="flex"
@@ -467,7 +471,7 @@ export const PropertyDetail = (props) => {
                 <DeleteBillForm />
               </Box>
             ) : null}
-            {togglePaymentForm ? (
+            {/* {togglePaymentForm ? (
               <Box
                 maxW={{ base: "100%", md: "100%" }}
                 flex={{ base: "none", md: 1 }} //
@@ -480,7 +484,7 @@ export const PropertyDetail = (props) => {
               >
                 <EditChargeForm />
               </Box>
-            ) : null}
+            ) : null} */}
 
             <Box w="100%" flex={3} maxHeight="80%">
               <div
