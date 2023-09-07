@@ -49,8 +49,15 @@ class Signup(Resource):
 
         db.session.commit()
 
+        user_list = []
+            # for user in user:
+        ordered_bills = [bill.to_dict() for bill in new_user.get_ordered_bills()]
+        user_dict = new_user.to_dict(rules=("-bills",))
+        user_dict['ordered_bills'] = ordered_bills
+        user_list.append(user_dict)
+
         # return new_user.to_dict()
-        return new_user.to_dict()
+        return make_response(user_list, 200)
 
 
 api.add_resource(Signup, "/signup", endpoint="signup")
