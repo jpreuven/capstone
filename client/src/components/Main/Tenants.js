@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 export default function Tenants() {
   const user = useSelector((state) => state.user.value);
-  console.log(user);
+  //   console.log(user);
 
   const tenantJSX = user[0].tenants.map((tenant) => {
     return (

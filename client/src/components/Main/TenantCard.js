@@ -27,7 +27,7 @@ export default function TenantCard({
     history.push(`/tenants/${id}`);
   }
   //   console.log(active);
-  console.log(leases[0]);
+  //   console.log(leases[0]);
   return (
     <Center py={6}>
       <Button

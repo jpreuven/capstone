@@ -2,6 +2,7 @@ import { Box, Center } from "@chakra-ui/react";
 import React, { useState, useEffect, useRef } from "react";
 import { Switch, Route } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+// import { setPayment } from "../../app/features/payments/paymentSlice";
 import { setUser } from "../../app/features/users/userSlice";
 import { convertDate } from "../../util/helper";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
@@ -34,6 +35,7 @@ function getRandomInt(max) {
 
 export default function Home() {
   const chartRef = useRef();
+  const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user.value);
   // console.log(user);
@@ -78,6 +80,7 @@ export default function Home() {
       let sum = bill.reduce(function (x, y) {
         return parseInt(x) + parseInt(y);
       }, 0);
+      // dispatch(setPayment(sum));
       const tenant = lease.tenant.first_name + " " + lease.tenant.last_name;
       return [tenant, sum];
     });
@@ -141,7 +144,8 @@ export default function Home() {
         <Box
           width="80%"
           height={1500}
-          style={{ overflowX: "scroll", overflowX: "hidden" }}
+          style={{ overflowX: "auto" }}
+          // style={{ overflowX: "scroll", overflowX: "hidden" }}
         >
           <Table>
             <Thead>
@@ -156,7 +160,7 @@ export default function Home() {
                   Tenant:
                 </Th>
                 <Th style={{ position: "sticky", top: 0, background: "white" }}>
-                  Date:
+                  Date Paid:
                 </Th>
                 <Th style={{ position: "sticky", top: 0, background: "white" }}>
                   Property:

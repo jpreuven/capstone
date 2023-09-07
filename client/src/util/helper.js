@@ -7,4 +7,13 @@ function convertDate(date) {
   return month + "/" + day + "/" + year;
 }
 
+function convertPhoneNumber(number) {
+  const string_number = number.toString();
+  return `(${string_number.slice(0, 3)}) ${string_number.slice(
+    3,
+    6
+  )}-${string_number.slice(6)}`;
+}
+
 export { convertDate };
+export { convertPhoneNumber };
