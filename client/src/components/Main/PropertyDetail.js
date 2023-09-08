@@ -36,6 +36,10 @@ import { BsFillCaretLeftSquareFill } from "react-icons/bs";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
+
 export const PropertyDetail = (props) => {
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -110,12 +114,65 @@ export const PropertyDetail = (props) => {
 
     return current_payment;
   });
-  // console.log(totalBillList);
+
+  const totalPaymentList = user[0].ordered_bills.flatMap((bill) => {
+    return bill.payments;
+  });
+  // console.log(totalPaymentList);
 
   let totalPayments = 0;
-  totalBillList.forEach((payment) => {
-    totalPayments += payment;
+  totalPaymentList.forEach((payment) => {
+    totalPayments += payment.amount;
   });
+  console.log(totalPayments);
+
+  // billArr = property[0].ordered_bills.flatMap((bill) => {
+  //   let blank_bill;
+  //   if (bill.charges.length === 0 && bill.payments.length === 0) {
+  //     blank_bill = {
+  //       bill_id: bill.id,
+  //       date: bill.date,
+  //       lease: bill.lease,
+  //       tenant:
+  //         bill.lease.tenant.first_name + " " + bill.lease.tenant.last_name,
+  //     };
+  //   }
+  //   const bill_charges = bill.charges.flatMap((charge) => {
+  //     return {
+  //       charge: charge,
+  //       bill_id: bill.id,
+  //       charge_id: charge.id,
+  //       lease: bill.lease,
+  //       date: bill.date,
+  //       tenant:
+  //         bill.lease.tenant.first_name + " " + bill.lease.tenant.last_name,
+  //       typeOfCharge: charge.type_of_charge,
+  //     };
+  //   });
+  //   const bill_payments = bill.payments.flatMap((payment) => {
+  //     return {
+  //       payment: payment,
+  //       bill_id: bill.id,
+  //       payment_id: payment.id,
+  //       lease: bill.lease,
+  //       date: payment.date_paid,
+  //       tenant:
+  //         bill.lease.tenant.first_name + " " + bill.lease.tenant.last_name,
+  //       paid_for: payment.paid_for,
+  //     };
+  //   });
+  //   if (blank_bill) {
+  //     return [blank_bill, bill_charges, bill_payments];
+  //   } else {
+  //     return [bill_charges, bill_payments];
+  //   }
+
+  // console.log(user[0].ordered_bills);
+
+  // let totalPayments = 0;
+  // totalBillList.forEach((payment) => {
+  //   totalPayments += payment;
+  // });
 
   const property = useSelector((state) => state.property.value);
   let currentDate;
@@ -124,6 +181,7 @@ export const PropertyDetail = (props) => {
   let propertyTables;
   let data;
   let propertyPayments = 0;
+  let currentPropertyPayments = 0;
 
   function handleEditPayments(e) {
     // let editableContent = e.target.innerHTML;
@@ -182,67 +240,19 @@ export const PropertyDetail = (props) => {
     }
   }
 
-  //   amount,
-  //   chargedFor,
-  //   bill_id,
-  //   tenant_id,
-  //   tenant,
-  //   date,
-  //   lease_id,
-  //   charge_id
-  // ) {
-  //   // setToggleChargeForm
-  //   const chargeInfo = {
-  //     amount: amount,
-  //     chargedFor: chargedFor,
-  //     bill_id: bill_id,
-  //     tenant_id: tenant_id,
-  //     tenant: tenant,
-  //     date: date,
-  //     lease_id: lease_id,
-  //     charge_id: charge_id,
-  //   };
-
-  //   setTogglePaymentForm(false);
-  //   setToggleBillForm(false);
-  //   setToggleDeleteBillForm(false);
-  //   setToggleEditChargeForm(true);
-
-  //   if (toggleChargeForm) {
-  //     dispatch(setChargeForm(chargeInfo));
-  //     setToggleChargeForm(false);
-
-  //     setToggleChargeForm(true);
-
-  //     console.log("just switch and edit");
-  //     // console.log(amount, chargedFor, bill_id);
-  //   }
-  //   if (!toggleChargeForm) {
-  //     dispatch(setChargeForm(chargeInfo));
-  //     setToggleChargeForm(true);
-  //     console.log("And only now switch and edit");
-  //     // console.log(amount, chargedFor, bill_id);
-  //   }
-  // }
-  let rand;
   if (property) {
-    // currentDate = new Date();
-    // let oneYearLater = new Date("2024-01-01 00:00:00");
-    // let middleDate = new Date("2023-10-01 00:00:00");
-    // console.log(currentDate < middleDate && middleDate < oneYearLater);
-    // console.log(property[0]);
-
     //TODO: same .length>1
-    const propertyBillList = property[0].ordered_bills.map((bill) => {
-      if (bill.payments.length > 0) {
-        return bill.payments[0].amount;
-      } else {
-        return 0;
-      }
-    });
-    propertyBillList.forEach((bill) => {
-      propertyPayments += bill;
-    });
+    // const propertyBillList = property[0].ordered_bills.map((bill) => {
+    //   if (bill.payments.length > 0) {
+    //     return bill.payments[0].amount;
+    //   } else {
+    //     return 0;
+    //   }
+    // });
+    // propertyBillList.forEach((bill) => {
+    //   propertyPayments += bill;
+    // });
+    // console.log(propertyBillList);
 
     // billArr = property[0].ordered_bills.map((bill) => {
     //   const bill_payment = bill.payments.length > 0 ? bill.payments[0] : "-";
@@ -271,9 +281,6 @@ export const PropertyDetail = (props) => {
     // });
     // console.log(property[0].ordered_bills);
     billArr = property[0].ordered_bills.flatMap((bill) => {
-      // billArr = property[0].ordered_bills.map((bill) => {
-      // return bill;
-      // const bill_charges = bill.charges.map((charge) => {
       let blank_bill;
       if (bill.charges.length === 0 && bill.payments.length === 0) {
         blank_bill = {
@@ -290,18 +297,17 @@ export const PropertyDetail = (props) => {
           bill_id: bill.id,
           charge_id: charge.id,
           lease: bill.lease,
-          // payments: bill.payments,
           date: bill.date,
           tenant:
             bill.lease.tenant.first_name + " " + bill.lease.tenant.last_name,
           typeOfCharge: charge.type_of_charge,
         };
       });
-      // const bill_payments = bill.payments.map((payment) => {
       const bill_payments = bill.payments.flatMap((payment) => {
         return {
           payment: payment,
           bill_id: bill.id,
+          payment_id: payment.id,
           lease: bill.lease,
           date: payment.date_paid,
           tenant:
@@ -309,13 +315,6 @@ export const PropertyDetail = (props) => {
           paid_for: payment.paid_for,
         };
       });
-      // const bill_payments = bill.payments.map((payment) => {
-      //   return payment;
-      // });
-      // console.log(bill_payments);
-      // bill_charges.payments = bill_payments;
-
-      // return [bill_charges, bill_payments];
       if (blank_bill) {
         return [blank_bill, bill_charges, bill_payments];
       } else {
@@ -347,8 +346,17 @@ export const PropertyDetail = (props) => {
       //   lease_id: `${bill.lease.id}`,
       // };
     });
-    console.log(billArr);
+    // console.log(billArr);
     const newBillArr = billArr.flatMap((bill) => bill);
+    const newPropertyBillList = newBillArr.filter((bill) => {
+      return bill.payment;
+    });
+    console.log(newPropertyBillList);
+    newPropertyBillList.forEach((bill) => {
+      currentPropertyPayments += bill.payment.amount;
+    });
+    console.log(currentPropertyPayments);
+
     const dataWithParsedDates = newBillArr.map((item) => ({
       ...item,
       parsedDate: new Date(item.date),
@@ -373,9 +381,9 @@ export const PropertyDetail = (props) => {
 
     propertyTables = dataWithParsedDates.map((bill) => {
       return (
-        <Fragment>
+        <Fragment key={getRandomInt(999999999999999999) + "bill"}>
           {!bill.charge && !bill.payment ? (
-            <Tr key={bill.payment_id + "payment"}>
+            <Tr key={bill.bill_id}>
               <Td>-</Td>
               <Td>-</Td>
               <Td>{bill.tenant}</Td>
@@ -518,7 +526,10 @@ export const PropertyDetail = (props) => {
       datasets: [
         {
           label: "Total $",
-          data: [propertyPayments, totalPayments - propertyPayments],
+          data: [
+            currentPropertyPayments,
+            totalPayments - currentPropertyPayments,
+          ],
 
           backgroundColor: [
             "rgba(255, 99, 132, 0.2)",

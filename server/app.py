@@ -275,6 +275,16 @@ class Charges (Resource):
         # return make_response(new_bill.to_dict(), 201)
 api.add_resource(Charges, "/charges")
 
+class ChargeByID(Resource):
+    def get(self, id):
+        charge = Charge.query.filter(Charge.id == id).first()
+        if charge:
+            return make_response(charge.to_dict(), 200)
+        else:
+            {"message": "401: Not Authorized"}, 401
+
+
+api.add_resource(ChargeByID, "/charges/<int:id>")
 
 class TEST(Resource):
     def get(self):
