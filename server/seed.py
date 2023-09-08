@@ -102,12 +102,12 @@ if __name__ == '__main__':
                 db.session.add(payment)
                 db.session.add(charge)
                 month += 1
-        # test_bill = Bill(date=datetime(2024, 1, 1), lease_id = 3)
-        # db.session.add(test_bill)
-        # test_charge = Charge(type_of_charge="rent", amount = 700, bill_id = 97)
-        # db.session.add(test_charge)
-        # extra_payment = Payment(amount = 9999, date_paid=datetime.now(), type_of_payment = 'new new', paid_for = "window", bill_id = 34)
-        # db.session.add(extra_payment)
+        test_bill = Bill(date=datetime(2024, 1, 1), lease_id = 3)
+        db.session.add(test_bill)
+        test_charge = Charge(type_of_charge="rent", amount = 700, bill_id = 97)
+        db.session.add(test_charge)
+        extra_payment = Payment(amount = 9999, date_paid=datetime.now(), type_of_payment = 'new new', paid_for = "window", bill_id = 34)
+        db.session.add(extra_payment)
 
         db.session.commit()
         # Seed code goes here!

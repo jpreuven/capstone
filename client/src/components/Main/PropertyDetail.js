@@ -104,16 +104,16 @@ export const PropertyDetail = (props) => {
   }
 
   /////////// TODO: have put condition if (bill.payments.length > 1)
-  const totalBillList = user[0].ordered_bills.map((bill) => {
-    let current_payment;
-    if (bill.payments.length === 1) {
-      current_payment = bill.payments[0].amount;
-    } else if (bill.payments.length === 0) {
-      current_payment = 0;
-    }
+  // const totalBillList = user[0].ordered_bills.map((bill) => {
+  //   let current_payment;
+  //   if (bill.payments.length === 1) {
+  //     current_payment = bill.payments[0].amount;
+  //   } else if (bill.payments.length === 0) {
+  //     current_payment = 0;
+  //   }
 
-    return current_payment;
-  });
+  //   return current_payment;
+  // });
 
   const totalPaymentList = user[0].ordered_bills.flatMap((bill) => {
     return bill.payments;
@@ -124,7 +124,7 @@ export const PropertyDetail = (props) => {
   totalPaymentList.forEach((payment) => {
     totalPayments += payment.amount;
   });
-  console.log(totalPayments);
+  // console.log(totalPayments);
 
   // billArr = property[0].ordered_bills.flatMap((bill) => {
   //   let blank_bill;
@@ -175,8 +175,6 @@ export const PropertyDetail = (props) => {
   // });
 
   const property = useSelector((state) => state.property.value);
-  let currentDate;
-  let dateInDatebase;
   let billArr;
   let propertyTables;
   let data;
@@ -348,14 +346,15 @@ export const PropertyDetail = (props) => {
     });
     // console.log(billArr);
     const newBillArr = billArr.flatMap((bill) => bill);
+    // console.log(newBillArr);
     const newPropertyBillList = newBillArr.filter((bill) => {
       return bill.payment;
     });
-    console.log(newPropertyBillList);
+    // console.log(newPropertyBillList);
     newPropertyBillList.forEach((bill) => {
       currentPropertyPayments += bill.payment.amount;
     });
-    console.log(currentPropertyPayments);
+    // console.log(currentPropertyPayments);
 
     const dataWithParsedDates = newBillArr.map((item) => ({
       ...item,
