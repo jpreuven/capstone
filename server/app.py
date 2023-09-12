@@ -204,6 +204,18 @@ class TenantByID(Resource):
         if not tenant:
             return make_response({"error": "Tenant not found"}, 404)
         return make_response(tenant.to_dict(), 200)
+    
+    def patch(self,id):
+        data = request.get_json()
+        tenant = Tenant.query.get(id)
+        if not tenant:
+            abort(404, "Cannot find tenant id") 
+        for key in data:
+            setattr(tenant, key, data[key])
+        db.session.add(tenant)
+        db.session.commit()
+        return make_response(tenant.to_dict(), 202)
+
 
 api.add_resource(TenantByID, "/tenants/<int:id>")
 
