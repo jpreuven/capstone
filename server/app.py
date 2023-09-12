@@ -298,6 +298,25 @@ class ChargeByID(Resource):
 
 api.add_resource(ChargeByID, "/charges/<int:id>")
 
+class Payments (Resource):
+    def post(self):
+        data = request.get_json()
+        date = data["date"]
+        # print(data["date"][0:4])
+        year = int(date[0:4])
+        month = int(date[5:7])
+        day = int(date[8:10])
+        bill_date = datetime(year, month, day)
+        try:
+            new_payment = Payment(date_paid = bill_date, amount = data["amount"], paid_for = data["paidFor"], bill_id = data["billID"], type_of_payment=data["typeOfPayment"])
+        except ValueError as e:
+            abort(422, e.args[0])
+        db.session.add(new_payment)
+        db.session.commit()
+
+        return make_response(new_payment.to_dict(), 201)
+api.add_resource(Payments, "/payments")
+
 class TEST(Resource):
     def get(self):
         pass

@@ -11,8 +11,6 @@ from config import db, bcrypt
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
     serialize_rules = ("-properties.user", "-_password_hash", "-tenants.user")
-    # serialize_rules = ("properties",)
-    # serialize_only = ("username", "first_name", "last_name", "email", "properties", "-properties.user")
 
     id = db.Column(db.Integer(), primary_key=True)
     username = db.Column(db.String(), nullable=False)
@@ -42,13 +40,11 @@ class User(db.Model, SerializerMixin):
         self._password_hash = password_hash.decode("utf-8")
 
     def authenticate(self, password):
-        # return bcrypt.check_password_hash(password.encode("utf-8"),self._password_hash)
         return bcrypt.check_password_hash(self._password_hash, password.encode("utf-8"))
 
 class Property(db.Model, SerializerMixin):
     __tablename__ = "properties"
     serialize_rules = ("-user.properties", "-leases.property",)
-    # serialize_rules = ("-user.properties", "-leases.property", "tenants_full","-tenants_full.user","-tenants_full.leases")
 
 
     id = db.Column(db.Integer(), primary_key=True)
