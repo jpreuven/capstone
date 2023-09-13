@@ -51,8 +51,10 @@ class Signup(Resource):
 
         user_list = []
         ordered_bills = [bill.to_dict() for bill in new_user.get_ordered_bills()]
+        ordered_leases = [lease.to_dict() for lease in new_user.get_ordered_leases()]
         user_dict = new_user.to_dict(rules=("-bills",))
         user_dict['ordered_bills'] = ordered_bills
+        user_dict['ordered_leases'] = ordered_leases
         user_list.append(user_dict)
 
         return make_response(user_list, 200)
@@ -72,8 +74,10 @@ class Login(Resource):
         
             user_list = []
             ordered_bills = [bill.to_dict() for bill in user.get_ordered_bills()]
+            ordered_leases = [lease.to_dict() for lease in user.get_ordered_leases()]
             user_dict = user.to_dict(rules=("-bills",))
             user_dict['ordered_bills'] = ordered_bills
+            user_dict['ordered_leases'] = ordered_leases
             user_list.append(user_dict)
             return make_response(user_list, 200)
 
@@ -87,8 +91,10 @@ class CheckSession(Resource):
         if user:
             user_list = []
             ordered_bills = [bill.to_dict() for bill in user.get_ordered_bills()]
+            ordered_leases = [lease.to_dict() for lease in user.get_ordered_leases()]
             user_dict = user.to_dict(rules=("-bills",))
             user_dict['ordered_bills'] = ordered_bills
+            user_dict['ordered_leases'] = ordered_leases
             user_list.append(user_dict)
             return make_response(user_list, 200)
 
@@ -112,8 +118,10 @@ class Users(Resource):
         user_list = []
         for user in users:
             ordered_bills = [bill.to_dict() for bill in user.get_ordered_bills()]
+            ordered_leases = [lease.to_dict() for lease in user.get_ordered_leases()]
             user_dict = user.to_dict(rules=("-bills",))
             user_dict['ordered_bills'] = ordered_bills
+            user_dict['ordered_leases'] = ordered_leases
             user_list.append(user_dict)
         return make_response(user_list, 200)
 
@@ -126,8 +134,10 @@ class UserByID(Resource):
         if user:
             user_list = []
             ordered_bills = [bill.to_dict() for bill in user.get_ordered_bills()]
+            ordered_leases = [lease.to_dict() for lease in user.get_ordered_leases()]
             user_dict = user.to_dict(rules=("-bills",))
             user_dict['ordered_bills'] = ordered_bills
+            user_dict['ordered_leases'] = ordered_leases
             user_list.append(user_dict)
             return make_response(user_list, 200)
 

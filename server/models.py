@@ -25,6 +25,14 @@ class User(db.Model, SerializerMixin):
     def get_ordered_bills(self):
         ordered_bills = Bill.query.join(Lease).join(Property).filter(Property.user_id == self.id).order_by(desc(Bill.date)).all()
         return ordered_bills
+    
+    # def get_ordered_bills(self):
+    #     ordered_bills = Bill.query.join(Lease).join(Property).filter(Property.id == self.id).order_by(desc(Bill.date)).all()
+    #     return ordered_bills
+    
+    def get_ordered_leases(self):
+        ordered_leases = Lease.query.join(Property).filter(Property.user_id == self.id).order_by(desc(Lease.end_date)).all()
+        return ordered_leases
 
 
     def __repr__ (self):
