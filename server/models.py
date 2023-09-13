@@ -82,7 +82,6 @@ class Property(db.Model, SerializerMixin):
 
 class Tenant(db.Model, SerializerMixin):
     __tablename__ = 'tenants'
-    # serialize_rules = ("-user.tenants", "-user._password_hash",)
     serialize_rules = ("-user.tenants", "-leases.tenant",)
 
 
@@ -97,7 +96,6 @@ class Tenant(db.Model, SerializerMixin):
     user_id = db.Column(db.Integer(), db.ForeignKey("users.id"))
 
     leases = db.relationship("Lease", back_populates="tenant", cascade = "delete")
-    # properties = association_proxy("leases", "property")
 
 
     def __repr__ (self):
