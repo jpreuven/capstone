@@ -1,11 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import TenantCard from "./TenantCard";
-import { Box, SimpleGrid } from "@chakra-ui/react";
+import {
+  Box,
+  SimpleGrid,
+  Center,
+  Button,
+  useColorModeValue,
+  Stack,
+  Text,
+  Heading,
+} from "@chakra-ui/react";
 import { useSelector, useDispatch } from "react-redux";
+import AddTenantForm from "./AddTenantForm";
 
 export default function Tenants() {
   const user = useSelector((state) => state.user.value);
-  //   console.log(user);
+  const [toggleAddTenant, setToggleAddTenant] = useState(false);
+
+  function handleAddNewTenant(e) {
+    setToggleAddTenant(!toggleAddTenant);
+  }
 
   const tenantJSX = user[0].tenants.map((tenant) => {
     return (
@@ -21,39 +35,51 @@ export default function Tenants() {
       />
     );
   });
-  //   active
-  // :
-  // false
-  // email
-  // :
-  // "y@y"
-  // first_name
-  // :
-  // "Yoni"
-  // id
-  // :
-  // 1
-  // last_name
-  // :
-  // "Reuven"
-  // leases
-  // :
-  // [{…}]
-  // phone_number
-  // :
-  // 111111111
-  // user_id
-  // :
-  // 1
+
   return (
     <SimpleGrid
       spacing={4}
       templateColumns="repeat(auto-fill, minmax(200px, 1fr))"
-      //   w="10%"
       ml="20%"
       mr="10%"
     >
       {tenantJSX}
+      <Center py={6}>
+        <Button
+          maxW={"270px"}
+          w={"full"}
+          h="100%"
+          bg={useColorModeValue("white", "gray.800")}
+          boxShadow={"2xl"}
+          rounded={"md"}
+          overflow={"hidden"}
+          _hover={{
+            transform: "translateY(-2px)",
+            boxShadow: "lg",
+            bg: "black",
+            color: "white",
+          }}
+          onClick={handleAddNewTenant}
+        >
+          <Box p={6}>
+            <Stack spacing={0} align={"center"} mb={5}>
+              <Heading fontSize={"2xl"} fontWeight={500} fontFamily={"body"}>
+                Add Tenant
+              </Heading>
+              {/* <Text color={"gray.500"}>
+                +
+              </Text> */}
+            </Stack>
+
+            <Stack direction={"row"} justify={"center"} spacing={6}>
+              <Stack spacing={0} align={"center"}>
+                <Text fontSize={"sm"} color={"black.500"}></Text>
+              </Stack>
+            </Stack>
+          </Box>
+        </Button>
+      </Center>
+      <Center py={6}>{toggleAddTenant ? <AddTenantForm /> : null}</Center>
     </SimpleGrid>
   );
 }

@@ -27,7 +27,6 @@ export const BillForm = () => {
   const dispatch = useDispatch();
 
   const userID = useSelector((state) => state.user.value)[0].id;
-  // console.log(user[0].id);
 
   const formSchema = yup.object().shape({
     date: yup.date().required("Date is required"),
@@ -36,7 +35,6 @@ export const BillForm = () => {
   const property = useSelector((state) => state.property.value);
   console.log(property[0].ordered_leases);
   const leaseDropdownJSX = property[0].ordered_leases.map((lease) => {
-    // console.log(lease);
     const optionValue = JSON.stringify({
       lease_id: lease.id,
       tenant_id: lease.tenant.id,
@@ -54,10 +52,8 @@ export const BillForm = () => {
     const newBill = {
       date: value.date,
       lease_id: parsedValue.lease_id,
-      // lease_id: tenant.leases[0].id,
     };
-    // console.log(newBill);
-    // console.log(value.lease_id["lease_id"]);
+
     fetch("/bills", {
       method: "POST",
       headers: {
@@ -85,9 +81,6 @@ export const BillForm = () => {
               r.json().then((new_tenant) => dispatch(setTenant(new_tenant)));
             }
           });
-          //   const updatedCollections = [...collections, collection];
-          //   setCollections(updatedCollections);
-          //   history.push("/collections");
         });
       } else {
         res.json().then((error) => {
@@ -114,16 +107,14 @@ export const BillForm = () => {
             <FormLabel htmlFor="name">Bill Form:</FormLabel>
             <DatePicker
               selected={startDate}
-              minDate={new Date()}
+              // minDate={new Date()}
               onChange={(date) => {
                 setStartDate(date);
                 const formattedDate = date.toLocaleDateString("en-CA");
                 props.setFieldValue("date", formattedDate);
               }}
               dateFormat="MM/dd/yyyy"
-              //   renderDayContents={renderDayContents}
             />
-            {/* <FormControl as={GridItem} colSpan={[6, 3]}> */}
             <FormLabel
               htmlFor="lease_id"
               fontSize="sm"
@@ -138,19 +129,17 @@ export const BillForm = () => {
             <Select
               id="lease_id"
               name="lease_id"
-              // autoComplete="lease"
               placeholder="Select option"
               focusBorderColor="brand.400"
               shadow="sm"
               size="sm"
               w="full"
               rounded="md"
-              value={props.values.lease_id} // Set the value of the Select input
+              value={props.values.lease_id}
               onChange={props.handleChange}
             >
               {leaseDropdownJSX}
             </Select>
-            {/* </FormControl> */}
 
             <FormErrorMessage>{props.errors.name}</FormErrorMessage>
             <Button type="submit">Submit</Button>

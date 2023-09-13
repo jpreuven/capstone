@@ -18,39 +18,12 @@ import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import { setProperty } from "../../app/features/properties/propertySlice";
 import { setTenant } from "../../app/features/tenant/tenantSlice";
 import { setUser } from "../../app/features/users/userSlice";
-import { setChargeForm } from "../../app/features/chargeForm/chargeFormSlice";
 
 export const ChargeForm = () => {
-  // export const ChargeForm = ({ toggleChargeForm, setToggleChargeForm }) => {
-
   const { id } = useParams();
   const dispatch = useDispatch();
 
   const userID = useSelector((state) => state.user.value)[0].id;
-  // const chargeInfo = useSelector((state) => state.chargeForm.value);
-  // let chargeInfoAmount = "";
-  // let chargeInfoChargedFor = "";
-  // let chargeInfoBillID = "";
-  // let chargeInfoTenantID = "";
-  // let chargeInfoTenant = "";
-  // let chargeInfoDate = "";
-  // let chargeInfolease_id = "";
-  // let chargeInfoCharge_id = "";
-
-  // console.log(chargeInfo);
-
-  // if (chargeInfo) {
-  //   chargeInfoAmount = chargeInfo.amount;
-  //   chargeInfoChargedFor = chargeInfo.chargedFor;
-  //   chargeInfoBillID = chargeInfo.bill_id;
-  //   chargeInfoTenantID = chargeInfo.tenant_id;
-  //   chargeInfoTenant = chargeInfo.tenant;
-  //   chargeInfoDate = chargeInfo.date;
-  //   chargeInfolease_id = chargeInfo.lease_id;
-  //   chargeInfoCharge_id = chargeInfo.charge_id;
-  // }
-  // console.log(chargeInfo);
-  // setChargeForm(chargeInfo);
 
   const formSchema = yup.object().shape({
     type_of_charge: yup.string().required("Please enter a type of charge"),
@@ -74,10 +47,6 @@ export const ChargeForm = () => {
       );
     });
   }
-
-  // function handleSubmitEditCharge(value) {
-  //   console.log(value);
-  // }
 
   function handleSubmitCharge(value) {
     const parsedValue = JSON.parse(value.bill_id);
@@ -115,30 +84,15 @@ export const ChargeForm = () => {
             }
           });
         });
-        // dispatch(setChargeForm(null));
-        // setToggleChargeForm(false);
-        // chargeInfoAmount = "";
-        // chargeInfoChargedFor = "";
-        // chargeInfoBillID = "";
       }
     });
   }
 
-  // chargeInfoAmount, chargeInfoChargedFor, chargeInfoBillID;
-  // console.log(chargeInfoChargedFor);
-
   return (
     <Formik
       initialValues={{ type_of_charge: "", amount: "", bill_id: "" }}
-      // initialValues={{
-      //   type_of_charge: chargeInfoChargedFor,
-      //   amount: chargeInfoAmount,
-      //   bill_id: chargeInfoBillID,
-      // }}
       validationSchema={formSchema}
-      onSubmit={(value) => handleSubmitCharge(value)} // Wrap the console.log in a function
-      // onSubmit={chargeInfo ? handleSubmitEditCharge : handleSubmitCharge}
-      // {chargeInfo ? onSubmit={handleSubmitCharge} : onSubmit = {handleSubmitEditCharge}}
+      onSubmit={(value) => handleSubmitCharge(value)}
     >
       {(props) => (
         <form onSubmit={props.handleSubmit}>
@@ -148,8 +102,6 @@ export const ChargeForm = () => {
               <Field
                 as={Input}
                 type="text"
-                // placeholder={chargeInfoChargedFor}
-                // placeholder=""
                 id="type_of_charge"
                 name="type_of_charge"
                 onChange={props.handleChange}
@@ -161,7 +113,6 @@ export const ChargeForm = () => {
               <FormLabel htmlFor="amount">Amount:</FormLabel>
               <Field
                 type="number"
-                // placeholder={chargeInfoAmount}
                 as={Input}
                 id="amount"
                 name="amount"
@@ -175,21 +126,13 @@ export const ChargeForm = () => {
               <Select
                 id="bill_id"
                 name="bill_id"
-                // autoComplete="lease"
-                // placeholder={
-                //   chargeInfo
-                //     ? `Bill date: ${convertDate(
-                //         chargeInfoDate
-                //       )} | Lease ID: ${chargeInfolease_id} | Tenant: ${chargeInfoTenant}`
-                //     : "Select option"
-                // }
                 placeholder="Select option"
                 focusBorderColor="brand.400"
                 shadow="sm"
                 size="sm"
                 w="full"
                 rounded="md"
-                value={props.values.bill_id} // Set the value of the Select input
+                value={props.values.bill_id}
                 onChange={props.handleChange}
               >
                 {propertyListJSX}

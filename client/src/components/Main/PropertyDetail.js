@@ -397,53 +397,15 @@ export const PropertyDetail = (props) => {
               <Td>{bill.tenant}</Td>
               <Td>{bill.paid_for}</Td>
               <Td>{convertDate(bill.date)}</Td>
-              {/* <Td>
-                <button
-                  onClick={handleEditPayments}
-                  style={{ textAlign: "center" }}
-                >
-                  ✎
-                </button>
-              </Td> */}
             </Tr>
           ) : null}
           {bill.charge ? (
             <Tr key={bill.charge_id + "charge"}>
-              <Td>
-                $
-                {/* <input type="number" contentEditable value={bill.charges} /> */}
-                {bill.charge.amount}
-                {/* <input
-                  type="number"
-                  contentEditable
-                  value={charges[bill.id] || bill.charge.amount} // Use charges state value or default value from bill
-                  onChange={(e) => handleEditChargeInput(e, bill)} // Handle input change
-                  onBlur={(e) => handleChargeInputBlur(e, bill, bill.charge_id)}
-                /> */}
-              </Td>
+              <Td>${bill.charge.amount}</Td>
               <Td>-</Td>
               <Td>{bill.tenant}</Td>
               <Td>{bill.typeOfCharge}</Td>
               <Td>{convertDate(bill.date)}</Td>
-              {/* <Td>
-                <button
-                  // onClick={() =>
-                  //   handleEditCharge(
-                  //     bill.charges,
-                  //     bill.charged_for,
-                  //     bill.id,
-                  //     bill.tenant_id,
-                  //     bill.tenant,
-                  //     bill.charge_date,
-                  //     bill.lease_id,
-                  //     bill.charge_id
-                  //   )
-                  // }
-                  style={{ textAlign: "center" }}
-                >
-                  ✎
-                </button>
-              </Td> */}
             </Tr>
           ) : null}
         </Fragment>
@@ -548,12 +510,11 @@ export const PropertyDetail = (props) => {
   return (
     <Center py={8}>
       <Flex
-        justifyContent={{ base: "center", md: "space-between" }} // Center content horizontally on small screens, create space between on medium screens
-        alignItems={{ base: "flex-start", md: "center" }} // Align items to the start on small screens, center on medium screens
-        flexDirection={{ base: "column", md: "row" }} // Stack content in a column on small screens, arrange in a row on medium screens
+        justifyContent={{ base: "center", md: "space-between" }}
+        alignItems={{ base: "flex-start", md: "center" }}
+        flexDirection={{ base: "column", md: "row" }}
         width="100%"
-        // ml="15%"
-        ml={{ base: 0, md: "15%" }} // Remove left margin on small screens
+        ml={{ base: 0, md: "15%" }}
       >
         <Box
           display="flex"
@@ -561,8 +522,7 @@ export const PropertyDetail = (props) => {
           alignItems={{ base: "flex-start", md: "center" }}
         >
           <Box
-            // width="60%"
-            width={{ base: "100%", md: "60%" }} // Full width on small screens, 60% width on medium screens
+            width={{ base: "100%", md: "60%" }}
             height={500}
             display="flex"
             justifyContent="center"
@@ -581,21 +541,19 @@ export const PropertyDetail = (props) => {
           <Box
             display="flex"
             flexDirection="column"
-            // alignItems={{ base: "flex-start", md: "center" }}
-            // mt="5%"
-            alignItems={{ base: "flex-start", md: "center" }} // Align items to the start on small screens, center on medium screens
-            mt={{ base: "5%", md: 0 }} // Add top margin on small screens, no margin on medium screens
-            width={{ base: "100%", md: "40%" }} // Full width on small screens, 40% width on medium screens
+            alignItems={{ base: "flex-start", md: "center" }}
+            mt={{ base: "5%", md: 0 }}
+            width={{ base: "100%", md: "40%" }}
           >
             <Box
               maxW={{ base: "100%", md: "100%" }}
-              flex={{ base: "none", md: 1 }} //
+              flex={{ base: "none", md: 1 }}
               w={"full"}
               boxShadow={"2xl"}
               rounded={"lg"}
               p={6}
               textAlign={"center"}
-              mb={{ base: "2rem", md: 0 }} //
+              mb={{ base: "2rem", md: 0 }}
             >
               <Heading fontSize={"2xl"} fontFamily={"body"}>
                 {property[0].address}
@@ -606,9 +564,7 @@ export const PropertyDetail = (props) => {
               <Text fontWeight={600} color={"gray.500"} mb={4}>
                 Current Tenant: TBD
               </Text>
-              <Text textAlign={"center"} px={3}>
-                {/* {tenant.leases[0].property.address} */}
-              </Text>
+              <Text textAlign={"center"} px={3}></Text>
 
               <Stack mt={8} direction={"row"} spacing={4}>
                 <Button
@@ -717,20 +673,6 @@ export const PropertyDetail = (props) => {
                 <DeleteBillForm />
               </Box>
             ) : null}
-            {/* {togglePaymentForm ? (
-              <Box
-                maxW={{ base: "100%", md: "100%" }}
-                flex={{ base: "none", md: 1 }} //
-                w={"full"}
-                boxShadow={"2xl"}
-                rounded={"lg"}
-                p={6}
-                textAlign={"center"}
-                mb={5}
-              >
-                <EditChargeForm />
-              </Box>
-            ) : null} */}
 
             <Box w="100%" flex={3} maxHeight="80%">
               <div
@@ -788,15 +730,6 @@ export const PropertyDetail = (props) => {
                       >
                         Date Paid:
                       </Th>
-                      {/* <Th
-                        style={{
-                          position: "sticky",
-                          top: 0,
-                          background: "white",
-                        }}
-                      >
-                        Edit:
-                      </Th> */}
                     </Tr>
                   </Thead>
                   <Tbody>{propertyTables}</Tbody>

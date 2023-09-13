@@ -35,8 +35,6 @@ export const EditChargeForm = ({ toggleChargeForm, setToggleChargeForm }) => {
   let chargeInfolease_id = "";
   let chargeInfoCharge_id = "";
 
-  // console.log(chargeInfo);
-
   if (chargeInfo) {
     chargeInfoAmount = chargeInfo.amount;
     chargeInfoChargedFor = chargeInfo.chargedFor;
@@ -47,8 +45,6 @@ export const EditChargeForm = ({ toggleChargeForm, setToggleChargeForm }) => {
     chargeInfolease_id = chargeInfo.lease_id;
     chargeInfoCharge_id = chargeInfo.charge_id;
   }
-  // console.log(chargeInfo);
-  // setChargeForm(chargeInfo);
 
   const formSchema = yup.object().shape({
     type_of_charge: yup.string().required("Please enter a type of charge"),
@@ -115,28 +111,19 @@ export const EditChargeForm = ({ toggleChargeForm, setToggleChargeForm }) => {
         });
         dispatch(setChargeForm(null));
         setToggleChargeForm(false);
-        // chargeInfoAmount = "";
-        // chargeInfoChargedFor = "";
-        // chargeInfoBillID = "";
       }
     });
   }
 
-  // chargeInfoAmount, chargeInfoChargedFor, chargeInfoBillID;
-  // console.log(chargeInfoChargedFor);
-
   return (
     <Formik
-      // initialValues={{ type_of_charge: "", amount: "", bill_id: "" }}
       initialValues={{
         type_of_charge: chargeInfoChargedFor,
         amount: chargeInfoAmount,
         bill_id: chargeInfoBillID,
       }}
       validationSchema={formSchema}
-      // onSubmit={(value) => handleSubmitCharge(value)} // Wrap the console.log in a function
       onSubmit={chargeInfo ? handleSubmitEditCharge : handleSubmitCharge}
-      // {chargeInfo ? onSubmit={handleSubmitCharge} : onSubmit = {handleSubmitEditCharge}}
     >
       {(props) => (
         <form onSubmit={props.handleSubmit}>
@@ -147,7 +134,6 @@ export const EditChargeForm = ({ toggleChargeForm, setToggleChargeForm }) => {
                 as={Input}
                 type="text"
                 placeholder={chargeInfoChargedFor}
-                // placeholder=""
                 id="type_of_charge"
                 name="type_of_charge"
                 onChange={props.handleChange}
@@ -173,7 +159,6 @@ export const EditChargeForm = ({ toggleChargeForm, setToggleChargeForm }) => {
               <Select
                 id="bill_id"
                 name="bill_id"
-                // autoComplete="lease"
                 placeholder={
                   chargeInfo
                     ? `Bill date: ${convertDate(
@@ -186,7 +171,7 @@ export const EditChargeForm = ({ toggleChargeForm, setToggleChargeForm }) => {
                 size="sm"
                 w="full"
                 rounded="md"
-                value={props.values.bill_id} // Set the value of the Select input
+                value={props.values.bill_id}
                 onChange={props.handleChange}
               >
                 {propertyListJSX}

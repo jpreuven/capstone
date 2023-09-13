@@ -48,11 +48,6 @@ export const DeleteBillForm = (props) => {
   });
 
   function handleSubmitButton(value) {
-    // console.log(formSchema.fields.bill_id);
-    // console.log("handle Submit button");
-    // console.log(value);
-    // let parsedValue = JSON.parse(billToDelete.bill_id);
-
     setBillToDelete(JSON.parse(value.bill_id));
     setConfirmDelete(true);
   }
@@ -140,7 +135,6 @@ export const DeleteBillForm = (props) => {
                   _focus={{
                     bg: "red.500",
                   }}
-                  //   type="submit"
                   onClick={handleSubmitDeleteBill}
                 >
                   Yes
@@ -158,7 +152,7 @@ export const DeleteBillForm = (props) => {
                   size="sm"
                   w="full"
                   rounded="md"
-                  value={props.values.bill_id} // Set the value of the Select input
+                  value={props.values.bill_id}
                   onChange={props.handleChange}
                 >
                   {propertyListJSX}

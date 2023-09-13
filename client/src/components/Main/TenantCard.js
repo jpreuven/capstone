@@ -26,8 +26,7 @@ export default function TenantCard({
   function handleTenantPage() {
     history.push(`/tenants/${id}`);
   }
-  //   console.log(active);
-  //   console.log(leases[0]);
+
   return (
     <Center py={6}>
       <Button
@@ -43,8 +42,6 @@ export default function TenantCard({
           boxShadow: "lg",
           bg: "black",
           color: "white",
-          //   fontcolor: "white",
-          //   {useColorModeValue("black","black.800")}
         }}
         onClick={handleTenantPage}
       >
@@ -53,7 +50,10 @@ export default function TenantCard({
             <Heading fontSize={"2xl"} fontWeight={500} fontFamily={"body"}>
               {first_name} {last_name}
             </Heading>
-            <Text color={"gray.500"}>{leases[0].property.address}</Text>
+            <Text color={"gray.500"}>
+              {leases[0] ? leases[0].property.address : null}
+            </Text>
+            {/* <Text color={"gray.500"}>{leases[0].property.address}</Text> */}
           </Stack>
 
           <Stack direction={"row"} justify={"center"} spacing={6}>
@@ -69,20 +69,6 @@ export default function TenantCard({
               )}
             </Stack>
           </Stack>
-
-          {/* <Button
-            w={"full"}
-            mt={8}
-            bg={useColorModeValue("#151f21", "gray.900")}
-            color={"white"}
-            rounded={"md"}
-            _hover={{
-              transform: "translateY(-2px)",
-              boxShadow: "lg",
-            }}
-          >
-            Follow
-          </Button> */}
         </Box>
       </Button>
     </Center>

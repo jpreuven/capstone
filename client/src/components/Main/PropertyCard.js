@@ -40,25 +40,10 @@ export default function PropertyCard({ id, address, purchase_date, leases }) {
         <Box p={6}>
           <Stack spacing={0} align={"center"} mb={5}>
             <Heading fontSize={"2xl"} fontWeight={500} fontFamily={"body"}>
-              {/* {first_name} {last_name} */}
               {address}
             </Heading>
             <Text color={"gray.500"}>{convertDate(purchase_date)}</Text>
           </Stack>
-
-          {/* <Stack direction={"row"} justify={"center"} spacing={6}>
-            <Stack spacing={0} align={"center"}>
-              {active ? (
-                <Text fontSize={"sm"} color={"black.500"}>
-                  Active
-                </Text>
-              ) : (
-                <Text fontSize={"sm"} color={"black.500"}>
-                  Not Active
-                </Text>
-              )}
-            </Stack>
-          </Stack> */}
         </Box>
       </Button>
     </Center>
