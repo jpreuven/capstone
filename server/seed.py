@@ -40,14 +40,14 @@ if __name__ == '__main__':
         db.session.add(cumston)
 
         
-        yoni = Tenant(first_name = "Yoni", last_name = "Reuven", email ="y@y", user_id = "1", active = False, phone_number = "111111111")
-        debbie = Tenant(first_name = "Debbie", last_name = "Bala", email ="d@d", user_id = "1", active = False, phone_number = "222222222")
-        jason = Tenant(first_name = "Jason", last_name = "Taba", email ="j@j", user_id = "1", active = True, phone_number = "333333333")
-        chris = Tenant(first_name = "Chris", last_name = "johnson", email ="c@c", user_id = "1", active = False, phone_number = "4444444444")
-        bob = Tenant(first_name = "Bob", last_name = "smith", email ="b@b", user_id = "1", active = False, phone_number = "5555555555")
-        dani = Tenant(first_name = "Dani", last_name = "Azizi", email ="d@d", user_id = "1", active = False, phone_number = "666666666")
-        gavriel = Tenant(first_name = "Gabriel", last_name = "Stark", email ="g@g", user_id = "1", active = True, phone_number = "777777777")
-        jonathan = Tenant(first_name = "Jonathan", last_name = "Goldstein", email ="j@j", user_id = "2", active = True, phone_number = "999999999")
+        yoni = Tenant(first_name = "David", last_name = "Smith", email ="y@y", user_id = "1", active = False, phone_number = "111111111")
+        debbie = Tenant(first_name = "Debbie", last_name = "Cooper", email ="d@d", user_id = "1", active = False, phone_number = "222222222")
+        jason = Tenant(first_name = "Jason", last_name = "Carter", email ="j@j", user_id = "1", active = True, phone_number = "333333333")
+        chris = Tenant(first_name = "Chris", last_name = "Johnson", email ="c@c", user_id = "1", active = False, phone_number = "4444444444")
+        bob = Tenant(first_name = "Sophia", last_name = "Reynolds", email ="b@b", user_id = "1", active = False, phone_number = "5555555555")
+        dani = Tenant(first_name = "Ava", last_name = "Sullivan", email ="d@d", user_id = "1", active = False, phone_number = "666666666")
+        gavriel = Tenant(first_name = "Sam", last_name = "Parker", email ="g@g", user_id = "1", active = True, phone_number = "777777777")
+        jonathan = Tenant(first_name = "Oliva", last_name = "Anderson", email ="j@j", user_id = "2", active = True, phone_number = "999999999")
 
         db.session.add(yoni)
         db.session.add(debbie)
