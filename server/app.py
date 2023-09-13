@@ -146,6 +146,20 @@ class Properties(Resource):
             property_dict['ordered_leases'] = ordered_leases
             property_list.append(property_dict)
         return make_response(property_list, 200)
+    def post(self):
+        data = request.get_json()
+        date = data["date"]
+        year = int(date[0:4])
+        month = int(date[5:7])
+        day = int(date[8:10])
+        purchase_date = datetime(year, month, day)
+        try:
+            new_property = Property(purchase_date=purchase_date, address = data["address"],user_id=session.get("user_id"))            
+        except ValueError as e:
+            abort(422, e.args[0])
+        db.session.add(new_property)
+        db.session.commit()
+        return make_response(new_property.to_dict(), 201)
 
 
 api.add_resource(Properties, "/properties")
