@@ -26,15 +26,20 @@ export const BillForm = () => {
 
   const dispatch = useDispatch();
 
-  const userID = useSelector((state) => state.user.value)[0].id;
+  const user = useSelector((state) => state.user.value)[0];
 
   const formSchema = yup.object().shape({
     date: yup.date().required("Date is required"),
     lease_id: yup.string().required("Please choose a lease"),
   });
   const property = useSelector((state) => state.property.value);
-  console.log(property[0].ordered_leases);
-  const leaseDropdownJSX = property[0].ordered_leases.map((lease) => {
+
+  const filteredLeases = user.ordered_leases.filter(
+    (lease) => lease.property_id == id
+  );
+
+  // const leaseDropdownJSX = property[0].ordered_leases.map((lease) => {
+  const leaseDropdownJSX = filteredLeases.map((lease) => {
     const optionValue = JSON.stringify({
       lease_id: lease.id,
       tenant_id: lease.tenant.id,
@@ -64,23 +69,29 @@ export const BillForm = () => {
       if (res.ok) {
         res.json().then((bill) => {
           console.log(bill);
-          fetch(`/users/${userID}`).then((r) => {
+          fetch(`/users/${user.id}`).then((r) => {
             if (r.ok) {
-              r.json().then((new_user) => dispatch(setUser(new_user)));
+              r.json().then((new_user) => {
+                dispatch(setUser(new_user));
+                console.log(new_user);
+              });
             }
           });
-          fetch(`/properties/${id}`).then((r) => {
-            if (r.ok) {
-              r.json().then((new_property) =>
-                dispatch(setProperty(new_property))
-              );
-            }
-          });
-          fetch(`/tenants/${parsedValue.tenant_id}`).then((r) => {
-            if (r.ok) {
-              r.json().then((new_tenant) => dispatch(setTenant(new_tenant)));
-            }
-          });
+          // console.log(user);
+
+          // fetch(`/properties/${id}`).then((r) => {
+          //   if (r.ok) {
+          //     r.json().then((new_property) =>
+          //       dispatch(setProperty(new_property))
+          //     );
+          //   }
+          // });
+
+          // fetch(`/tenants/${parsedValue.tenant_id}`).then((r) => {
+          //   if (r.ok) {
+          //     r.json().then((new_tenant) => dispatch(setTenant(new_tenant)));
+          //   }
+          // });
         });
       } else {
         res.json().then((error) => {
