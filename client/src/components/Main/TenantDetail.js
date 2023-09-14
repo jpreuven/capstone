@@ -89,7 +89,7 @@ export const TenantDetail = (props) => {
           bill_id: bill.id,
           date: bill.date,
           lease: tenant.leases[0],
-          property: tenant.leases[0].property.address,
+          property: tenant.leases[0].property,
         };
       }
       const bill_charges = bill.charges.flatMap((charge) => {
@@ -100,7 +100,7 @@ export const TenantDetail = (props) => {
           lease: tenant.leases[0],
 
           date: bill.date,
-          property: tenant.leases[0].property.address,
+          property: tenant.leases[0].property,
 
           typeOfCharge: charge.type_of_charge,
         };
@@ -112,7 +112,7 @@ export const TenantDetail = (props) => {
           payment_id: payment.id,
           lease: tenant.leases[0],
           date: payment.date_paid,
-          property: tenant.leases[0].property.address,
+          property: tenant.leases[0].property,
 
           paid_for: payment.paid_for,
         };
@@ -146,7 +146,11 @@ export const TenantDetail = (props) => {
               <Td>-</Td>
               <Td>-</Td>
               <Td>{convertDate(bill.date)}</Td>
-              <Td>{bill.property}</Td>
+              <Td>
+                <a href={`/properties/${bill.property.id}`}>
+                  {bill.property.address}
+                </a>
+              </Td>
             </Tr>
           ) : null}
           {bill.payment ? (
@@ -155,7 +159,11 @@ export const TenantDetail = (props) => {
               <Td>${bill.payment.amount}</Td>
               <Td>{bill.paid_for}</Td>
               <Td>{convertDate(bill.date)}</Td>
-              <Td>{bill.property}</Td>
+              <Td>
+                <a href={`/properties/${bill.property.id}`}>
+                  {bill.property.address}
+                </a>
+              </Td>
             </Tr>
           ) : null}
           {bill.charge ? (
@@ -164,7 +172,11 @@ export const TenantDetail = (props) => {
               <Td>-</Td>
               <Td>{bill.typeOfCharge}</Td>
               <Td>{convertDate(bill.date)}</Td>
-              <Td>{bill.property}</Td>
+              <Td>
+                <a href={`/properties/${bill.property.id}`}>
+                  {bill.property.address}
+                </a>
+              </Td>
             </Tr>
           ) : null}
         </Fragment>
