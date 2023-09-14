@@ -27,7 +27,7 @@ export const PaymentForm = (props) => {
 
   const dispatch = useDispatch();
 
-  const userID = useSelector((state) => state.user.value)[0].id;
+  const user = useSelector((state) => state.user.value)[0];
 
   const formSchema = yup.object().shape({
     paidFor: yup
@@ -40,10 +40,13 @@ export const PaymentForm = (props) => {
     billID: yup.string().required("Please choose a bill"),
     date: yup.date().required("Date is required"),
   });
-  const property = useSelector((state) => state.property.value)[0];
   let propertyListJSX;
-  if (property) {
-    propertyListJSX = property.ordered_bills.map((bill) => {
+
+  if (user) {
+    const filteredOrderedBills = user.ordered_bills.filter((bill) => {
+      return bill.lease.property_id == id;
+    });
+    propertyListJSX = filteredOrderedBills.map((bill) => {
       const optionValue = JSON.stringify({
         billID: bill.id,
         tenantID: bill.lease.tenant.id,
@@ -76,21 +79,9 @@ export const PaymentForm = (props) => {
       if (res.ok) {
         res.json().then((charge) => {
           console.log(charge);
-          fetch(`/users/${userID}`).then((r) => {
+          fetch(`/users/${user.id}`).then((r) => {
             if (r.ok) {
               r.json().then((new_user) => dispatch(setUser(new_user)));
-            }
-          });
-          fetch(`/properties/${id}`).then((r) => {
-            if (r.ok) {
-              r.json().then((new_property) =>
-                dispatch(setProperty(new_property))
-              );
-            }
-          });
-          fetch(`/tenants/${parsedValue.tenantID}`).then((r) => {
-            if (r.ok) {
-              r.json().then((new_tenant) => dispatch(setTenant(new_tenant)));
             }
           });
         });

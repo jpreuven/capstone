@@ -50,24 +50,6 @@ export const ChargeForm = () => {
     });
   }
 
-  const property = useSelector((state) => state.property.value)[0];
-
-  // if (property) {
-  //   // console.log(property.ordered_bills);
-  //   propertyListJSX = property.ordered_bills.map((bill) => {
-  //     const optionValue = JSON.stringify({
-  //       bill_id: bill.id,
-  //       tenant_id: bill.lease.tenant.id,
-  //     });
-  //     return (
-  //       <option key={bill.id} value={optionValue}>
-  //         Bill date: {convertDate(bill.date)} | Lease ID: {bill.lease.id} |
-  //         Tenant: {bill.lease.tenant.first_name} {bill.lease.tenant.last_name}
-  //       </option>
-  //     );
-  //   });
-  // }
-
   function handleSubmitCharge(value) {
     const parsedValue = JSON.parse(value.bill_id);
     const newCharge = {
@@ -91,18 +73,6 @@ export const ChargeForm = () => {
               r.json().then((new_user) => dispatch(setUser(new_user)));
             }
           });
-          // fetch(`/properties/${id}`).then((r) => {
-          //   if (r.ok) {
-          //     r.json().then((new_property) =>
-          //       dispatch(setProperty(new_property))
-          //     );
-          //   }
-          // });
-          // fetch(`/tenants/${parsedValue.tenant_id}`).then((r) => {
-          //   if (r.ok) {
-          //     r.json().then((new_tenant) => dispatch(setTenant(new_tenant)));
-          //   }
-          // });
         });
       }
     });

@@ -126,7 +126,6 @@ class Lease(db.Model, SerializerMixin):
     tenant_id = db.Column(db.Integer(), db.ForeignKey("tenants.id"))
     bills = db.relationship("Bill", back_populates = "lease", cascade = "delete")
 
-
 class Bill(db.Model, SerializerMixin):
     __tablename__ = "bills"
     serialize_rules = ("-lease.bills", "-payments.bill", "-charges.bill")

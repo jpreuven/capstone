@@ -33,12 +33,14 @@ import DeleteBillForm from "./DeleteBillForm";
 import { number } from "yup";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { BsFillCaretLeftSquareFill } from "react-icons/bs";
+import AddLeaseForm from "./AddLeaseForm";
+import { getRandomInt } from "../../util/helper";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-function getRandomInt(max) {
-  return Math.floor(Math.random() * max);
-}
+// function getRandomInt(max) {
+//   return Math.floor(Math.random() * max);
+// }
 
 export const PropertyDetail = (props) => {
   const { id } = useParams();
@@ -50,6 +52,7 @@ export const PropertyDetail = (props) => {
   const [togglePaymentForm, setTogglePaymentForm] = useState(false);
   const [toggleBillForm, setToggleBillForm] = useState(false);
   const [toggleDeleteBillForm, setToggleDeleteBillForm] = useState(false);
+  const [toggleAddLeaseForm, setToggleAddLeaseForm] = useState(false);
   const [charges, setCharges] = useState({});
 
   const [tenantId, setTenantId] = useState(null);
@@ -66,6 +69,7 @@ export const PropertyDetail = (props) => {
     setTogglePaymentForm(false);
     setToggleBillForm(false);
     setToggleDeleteBillForm(false);
+    setToggleAddLeaseForm(false);
     // setToggleEditChargeForm(false);
 
     setToggleChargeForm(!toggleChargeForm);
@@ -77,6 +81,7 @@ export const PropertyDetail = (props) => {
     setToggleChargeForm(false);
     setToggleBillForm(false);
     setToggleDeleteBillForm(false);
+    setToggleAddLeaseForm(false);
     // setToggleEditChargeForm(false);
 
     setTogglePaymentForm(!togglePaymentForm);
@@ -87,6 +92,7 @@ export const PropertyDetail = (props) => {
     setToggleChargeForm(false);
     setTogglePaymentForm(false);
     setToggleDeleteBillForm(false);
+    setToggleAddLeaseForm(false);
     // setToggleEditChargeForm(false);
 
     setToggleBillForm(!toggleBillForm);
@@ -98,9 +104,19 @@ export const PropertyDetail = (props) => {
     setToggleChargeForm(false);
     setTogglePaymentForm(false);
     setToggleBillForm(false);
+    setToggleAddLeaseForm(false);
     // setToggleEditChargeForm(false);
 
     setToggleDeleteBillForm(!toggleDeleteBillForm);
+  }
+
+  function handleToggleLeaseForm() {
+    setToggleChargeForm(false);
+    setTogglePaymentForm(false);
+    setToggleBillForm(false);
+    setToggleDeleteBillForm(false);
+    setToggleAddLeaseForm(!toggleAddLeaseForm);
+    // setToggleEditChargeForm(false);
   }
 
   /////////// TODO: have put condition if (bill.payments.length > 1)
@@ -181,6 +197,7 @@ export const PropertyDetail = (props) => {
       );
     }
   }
+
   if (filteredOrderedBills) {
     billArr = filteredOrderedBills.flatMap((bill) => {
       let blank_bill;
@@ -442,6 +459,17 @@ export const PropertyDetail = (props) => {
                   _focus={{
                     bg: "gray.200",
                   }}
+                  onClick={handleToggleLeaseForm}
+                >
+                  Create New Lease
+                </Button>
+                <Button
+                  flex={1}
+                  fontSize={"sm"}
+                  rounded={"full"}
+                  _focus={{
+                    bg: "gray.200",
+                  }}
                   onClick={handleToggleDeleteBillForm}
                 >
                   Delete a Bill
@@ -506,6 +534,22 @@ export const PropertyDetail = (props) => {
                 mb={5}
               >
                 <DeleteBillForm />
+              </Box>
+            ) : null}
+
+            {toggleAddLeaseForm ? (
+              <Box
+                maxW={{ base: "100%", md: "100%" }}
+                flex={{ base: "none", md: 1 }} //
+                w={"full"}
+                boxShadow={"2xl"}
+                rounded={"lg"}
+                p={6}
+                textAlign={"center"}
+                mb={5}
+              >
+                {/* <DeleteBillForm /> */}
+                <AddLeaseForm />
               </Box>
             ) : null}
 
