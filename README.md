@@ -19,9 +19,13 @@ Welcome to the Property Management Web Application, a powerful tool for managing
 
 ## Features
 **Property Overview:** Get an overview of each property, including address, purchase date, and current tenant information.
+
 **Bills:** Add, edit, and delete bills associated with a property. Track the amount, due date, and purpose of each bill.
+
 **Payments:** Record payments made towards bills. Keep track of the date, amount, and the purpose of the payment.
+
 **Charges:** Add charges to a property, such as maintenance fees or utility bills. Update charge amounts as needed.
+
 **Data Visualization:** View charts and graphs that visualize property-related financial data, helping you understand payment distribution across properties.
 
 ## Getting Started
