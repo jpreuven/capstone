@@ -44,13 +44,17 @@ cd property-management-app`
 3. **Activate the Virtual Environment:** Activate the virtual environment using the following command:
 `pipenv shell`
 4. **Install JavaScript Dependencies:** Inside the project directory, install JavaScript dependencies using npm or yarn.
-`npm install
+```
+npm install
 # or
-yarn install`
+yarn install
+```
 5. **Start the Development Server:** Launch the development server to run the application locally.
-`npm start
+```
+npm start
 # or
-yarn start`
+yarn start
+```
 6. **Open in Your Browser:** Access the application by opening your web browser and navigating to http://localhost:3000.
 7. **Explore and Manage Properties:** You can now explore the application, add properties, and start managing bills, payments, and charges.
 
