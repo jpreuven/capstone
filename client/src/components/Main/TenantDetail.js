@@ -81,7 +81,6 @@ export const TenantDetail = (props) => {
   }
 
   if (tenant) {
-    console.log(tenant.leases[0].property.address);
     tenantBillArr = tenant.leases[0].bills.flatMap((bill) => {
       let blank_bill;
       if (bill.charges.length === 0 && bill.payments.length === 0) {

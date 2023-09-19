@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext, createContext } from "react";
-// import { Switch, Route } from "react-router-dom";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import Signup from "./Authentication/Signup";
 import Login from "./Authentication/Login";
@@ -9,8 +8,6 @@ import { ChakraProvider, Button } from "@chakra-ui/react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import Sidebar from "./Main/Sidebar";
 import { Provider } from "react-redux";
-// import {store} './app/store'
-// import { Store } from "redux";
 import { store } from "../app/store";
 import { useSelector, useDispatch } from "react-redux";
 import { setUser } from "../app/features/users/userSlice";

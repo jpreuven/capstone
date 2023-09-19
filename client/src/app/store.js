@@ -6,6 +6,7 @@ import paymentReducer from "./features/payments/paymentSlice";
 import propertyReducer from "./features/properties/propertySlice";
 import billsReducer from "./features/bills/billsSlice";
 import chargeFormReducer from "./features/chargeForm/chargeFormSlice";
+import billFilterReducer from "./features/billFilter/billFilter";
 
 export const store = configureStore({
   reducer: {
@@ -15,5 +16,6 @@ export const store = configureStore({
     property: propertyReducer,
     bills: billsReducer,
     chargeForm: chargeFormReducer,
+    billFilter: billFilterReducer,
   },
 });

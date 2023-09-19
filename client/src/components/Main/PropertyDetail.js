@@ -16,14 +16,13 @@ import {
   Tr,
   Th,
   Td,
+  Select,
 } from "@chakra-ui/react";
-// import chargeFormSlice, {
-//   setChargeForm,
-// } from "../../app/features/chargeForm/chargeFormSlice";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
 import { useSelector, useDispatch } from "react-redux";
 import { setProperty } from "../../app/features/properties/propertySlice";
+import { setBillFilter } from "../../app/features/billFilter/billFilter";
 import { convertPhoneNumber, convertDate } from "../../util/helper";
 import ChargeForm from "./ChargeForm";
 import EditChargeForm from "./EditChargeForm";
@@ -38,17 +37,15 @@ import { getRandomInt } from "../../util/helper";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-// function getRandomInt(max) {
-//   return Math.floor(Math.random() * max);
-// }
-
 export const PropertyDetail = (props) => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const chartRef = useRef();
   const user = useSelector((state) => state.user.value);
+  const billFilter = useSelector((state) => state.billFilter.value);
+
   const [toggleChargeForm, setToggleChargeForm] = useState(false);
-  // const [toggleEditChargeForm, setToggleEditChargeForm] = useState(false);
+  const [toggleFilterBills, setToggleFilterBills] = useState(false);
   const [togglePaymentForm, setTogglePaymentForm] = useState(false);
   const [toggleBillForm, setToggleBillForm] = useState(false);
   const [toggleDeleteBillForm, setToggleDeleteBillForm] = useState(false);
@@ -64,49 +61,38 @@ export const PropertyDetail = (props) => {
   }, []);
 
   function handleToggleChargeForm() {
-    // dispatch(setChargeForm(null)); //
-
     setTogglePaymentForm(false);
     setToggleBillForm(false);
     setToggleDeleteBillForm(false);
     setToggleAddLeaseForm(false);
-    // setToggleEditChargeForm(false);
-
+    setToggleFilterBills(false);
     setToggleChargeForm(!toggleChargeForm);
   }
 
   function handleTogglePaymentForm() {
-    // dispatch(setChargeForm(null)); //
-
     setToggleChargeForm(false);
     setToggleBillForm(false);
     setToggleDeleteBillForm(false);
     setToggleAddLeaseForm(false);
-    // setToggleEditChargeForm(false);
-
+    setToggleFilterBills(false);
     setTogglePaymentForm(!togglePaymentForm);
   }
 
   function handleToggleBillForm() {
-    // dispatch(setChargeForm(null)); //
     setToggleChargeForm(false);
     setTogglePaymentForm(false);
     setToggleDeleteBillForm(false);
     setToggleAddLeaseForm(false);
-    // setToggleEditChargeForm(false);
-
+    setToggleFilterBills(false);
     setToggleBillForm(!toggleBillForm);
   }
 
   function handleToggleDeleteBillForm() {
-    // dispatch(setChargeForm(null)); //
-
     setToggleChargeForm(false);
     setTogglePaymentForm(false);
     setToggleBillForm(false);
     setToggleAddLeaseForm(false);
-    // setToggleEditChargeForm(false);
-
+    setToggleFilterBills(false);
     setToggleDeleteBillForm(!toggleDeleteBillForm);
   }
 
@@ -115,8 +101,39 @@ export const PropertyDetail = (props) => {
     setTogglePaymentForm(false);
     setToggleBillForm(false);
     setToggleDeleteBillForm(false);
+    setToggleFilterBills(false);
     setToggleAddLeaseForm(!toggleAddLeaseForm);
   }
+
+  function handleToggleFilterBills() {
+    setToggleChargeForm(false);
+    setTogglePaymentForm(false);
+    setToggleBillForm(false);
+    setToggleDeleteBillForm(false);
+    setToggleAddLeaseForm(false);
+    setToggleFilterBills(!toggleFilterBills);
+  }
+
+  function handleBillFilter(e) {
+    if (e.target.value == 0) {
+      dispatch(setBillFilter(null));
+    } else {
+      dispatch(setBillFilter(e.target.value));
+    }
+  }
+
+  const billsFilteredByProperty = user[0].ordered_bills.filter((bill) => {
+    return bill.lease.property_id == id;
+  });
+
+  const billListJSX = billsFilteredByProperty.map((bill) => {
+    return (
+      <option key={bill.id} value={bill.id}>
+        Bill ID: {bill.id} | Bill Date: {bill.date} | Tenant:
+        {bill.lease.tenant.first_name} {bill.lease.tenant.last_name}
+      </option>
+    );
+  });
 
   const totalPaymentList = user[0].ordered_bills.flatMap((bill) => {
     return bill.payments;
@@ -127,11 +144,14 @@ export const PropertyDetail = (props) => {
     totalPayments += payment.amount;
   });
 
-  const property = useSelector((state) => state.property.value);
-
   const filteredOrderedBills = user[0].ordered_bills.filter((bill) => {
-    return bill.lease.property_id == id;
+    if (billFilter) {
+      return bill.lease.property_id == id && bill.id == billFilter;
+    } else {
+      return bill.lease.property_id == id;
+    }
   });
+
   const propertyDetails = user[0].properties.filter((property) => {
     return property.id == id;
   })[0];
@@ -139,47 +159,7 @@ export const PropertyDetail = (props) => {
   let billArr;
   let propertyTables;
   let data;
-  let propertyPayments = 0;
   let currentPropertyPayments = 0;
-
-  function handleEditPayments(e) {
-    console.log(e);
-  }
-
-  function handleEditChargeInput(e, bill) {
-    const inputText = e.target.value; // Use e.target.value to get the input value
-
-    // Check if the input is a valid number
-    if (!isNaN(inputText)) {
-      // Update the charges state with the new value
-      setCharges((prevCharges) => ({
-        ...prevCharges,
-        [bill.id]: inputText,
-      }));
-    }
-  }
-
-  function handleChargeInputBlur(e, bill, charge) {
-    const inputText = e.target.value;
-
-    if (!isNaN(inputText)) {
-      // Update the charges state with the new value
-      setCharges((prevCharges) => ({
-        ...prevCharges,
-        [bill.id]: inputText,
-      }));
-
-      // Log the new value
-      console.log(
-        "New value for bill " +
-          bill.id +
-          ": " +
-          inputText +
-          "and charge id:" +
-          charge
-      );
-    }
-  }
 
   if (filteredOrderedBills) {
     billArr = filteredOrderedBills.flatMap((bill) => {
@@ -283,7 +263,6 @@ export const PropertyDetail = (props) => {
 
     data = {
       labels: [`${propertyDetails.address}`, `Other Properties`],
-      // labels: [`holdup`, `Other Properties`],
 
       datasets: [
         {
@@ -329,6 +308,7 @@ export const PropertyDetail = (props) => {
             justifyContent="center"
             alignItems="center"
             flexDirection="column"
+            mt={billFilter == 0 || !billFilter ? null : 40}
           >
             <Pie
               ref={chartRef}
@@ -342,7 +322,7 @@ export const PropertyDetail = (props) => {
           <Box
             display="flex"
             flexDirection="column"
-            alignItems={{ base: "flex-start", md: "center" }}
+            alignItems="flex-start"
             mt={{ base: "5%", md: 0 }}
             width={{ base: "100%", md: "40%" }}
           >
@@ -367,64 +347,80 @@ export const PropertyDetail = (props) => {
               </Text>
               <Text textAlign={"center"} px={3}></Text>
 
-              <Stack mt={8} direction={"row"} spacing={4}>
-                <Button
-                  flex={1}
-                  fontSize={"sm"}
-                  rounded={"full"}
-                  _focus={{
-                    bg: "gray.200",
-                  }}
-                  onClick={handleToggleBillForm}
-                >
-                  Add New Bill
-                </Button>
-                <Button
-                  flex={1}
-                  fontSize={"sm"}
-                  rounded={"full"}
-                  _focus={{
-                    bg: "gray.200",
-                  }}
-                  onClick={handleToggleChargeForm}
-                >
-                  Add Charge
-                </Button>
-                <Button
-                  flex={1}
-                  fontSize={"sm"}
-                  rounded={"full"}
-                  _focus={{
-                    bg: "gray.200",
-                  }}
-                  onClick={handleTogglePaymentForm}
-                >
-                  Add Payment
-                </Button>
-                <Button
-                  flex={1}
-                  fontSize={"sm"}
-                  rounded={"full"}
-                  _focus={{
-                    bg: "gray.200",
-                  }}
-                  onClick={handleToggleLeaseForm}
-                >
-                  Create New Lease
-                </Button>
-                <Button
-                  flex={1}
-                  fontSize={"sm"}
-                  rounded={"full"}
-                  _focus={{
-                    bg: "gray.200",
-                  }}
-                  onClick={handleToggleDeleteBillForm}
-                >
-                  Delete a Bill
-                </Button>
+              <Stack mt={8} direction={"column"} spacing={4}>
+                <Stack mt={2} direction={"row"} spacing={2}>
+                  <Button
+                    flex={1}
+                    fontSize={"sm"}
+                    rounded={"full"}
+                    _focus={{
+                      bg: "gray.200",
+                    }}
+                    onClick={handleToggleBillForm}
+                  >
+                    Add New Bill
+                  </Button>
+                  <Button
+                    flex={1}
+                    fontSize={"sm"}
+                    rounded={"full"}
+                    _focus={{
+                      bg: "gray.200",
+                    }}
+                    onClick={handleToggleChargeForm}
+                  >
+                    Add Charge
+                  </Button>
+                  <Button
+                    flex={1}
+                    fontSize={"sm"}
+                    rounded={"full"}
+                    _focus={{
+                      bg: "gray.200",
+                    }}
+                    onClick={handleTogglePaymentForm}
+                  >
+                    Add Payment
+                  </Button>
+                </Stack>
+                <Stack mt={2} direction={"row"} spacing={2}>
+                  <Button
+                    flex={1}
+                    fontSize={"sm"}
+                    rounded={"full"}
+                    _focus={{
+                      bg: "gray.200",
+                    }}
+                    onClick={handleToggleLeaseForm}
+                  >
+                    Create New Lease
+                  </Button>
+                  <Button
+                    flex={1}
+                    fontSize={"sm"}
+                    rounded={"full"}
+                    _focus={{
+                      bg: "gray.200",
+                    }}
+                    onClick={handleToggleDeleteBillForm}
+                  >
+                    Delete a Bill
+                  </Button>
+                  <Button
+                    flex={1}
+                    fontSize={"sm"}
+                    rounded={"full"}
+                    _focus={{
+                      bg: "gray.200",
+                    }}
+                    onClick={handleToggleFilterBills}
+                  >
+                    Filter Bills
+                  </Button>
+                </Stack>
               </Stack>
             </Box>
+
             <br />
             {togglePaymentForm ? (
               <Box
@@ -497,8 +493,24 @@ export const PropertyDetail = (props) => {
                 textAlign={"center"}
                 mb={5}
               >
-                {/* <DeleteBillForm /> */}
                 <AddLeaseForm />
+              </Box>
+            ) : null}
+
+            {toggleFilterBills ? (
+              <Box
+                maxW={{ base: "100%", md: "100%" }}
+                flex={{ base: "none", md: 1 }} //
+                w={"full"}
+                boxShadow={"2xl"}
+                rounded={"lg"}
+                p={4}
+                textAlign={"center"}
+              >
+                <Select onChange={handleBillFilter}>
+                  <option value={0}>Select Bill to Filter:</option>
+                  {billListJSX}
+                </Select>
               </Box>
             ) : null}
 
