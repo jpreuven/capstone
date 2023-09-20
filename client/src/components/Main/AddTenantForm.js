@@ -3,6 +3,7 @@ import {
   FormControl,
   FormLabel,
   GridItem,
+  Heading,
   Input,
   Radio,
   RadioGroup,
@@ -141,6 +142,7 @@ export default function AddTenantForm() {
           <FormControl
             isInvalid={!!props.errors.firstName && props.touched.firstName}
           >
+            <Heading>New Tenant Form</Heading>
             <FormLabel
               htmlFor="firstName"
               fontSize="sm"

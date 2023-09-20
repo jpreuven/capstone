@@ -64,7 +64,6 @@ export default function Login() {
   }
 
   function handleSubmit(e) {
-    // console.log(e);
     fetch("/login", {
       method: "POST",
       headers: {
@@ -74,19 +73,12 @@ export default function Login() {
     }).then((r) => {
       if (r.ok) {
         r.json().then((user) => {
-          //   setUser(user);
           handleSetUser(user);
-          // console.log(user);
           history.push("/");
         });
-        // setCollections()
-        // fetchUser(user);
-
-        // history.push("/");
       } else {
         console.log("doesn't exist");
         setSuccessfulLogin(false);
-        // setTimeout(() => setSuccessfulLogin(true), 3000);
       }
     });
   }
