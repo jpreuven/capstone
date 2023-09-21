@@ -26,12 +26,6 @@ export const AddLeaseForm = () => {
 
   const { id } = useParams();
 
-  //   rent_amount
-  //   start_date
-  //   end_date
-  //   property_id
-  //   tenant_id
-
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user.value)[0];
@@ -42,7 +36,6 @@ export const AddLeaseForm = () => {
     rent: yup.number().required("Rent is required"),
     tenant: yup.number().required("Tenant is required"),
   });
-  //   const property = useSelector((state) => state.property.value);
 
   console.log(user.tenants);
 
@@ -82,47 +75,6 @@ export const AddLeaseForm = () => {
         });
       }
     });
-
-    // fetch("/leases", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(newBill),
-    // }).then((res) => {
-    //   if (res.ok) {
-    //     res.json().then((bill) => {
-    //       console.log(bill);
-    //       fetch(`/users/${user.id}`).then((r) => {
-    //         if (r.ok) {
-    //           r.json().then((new_user) => {
-    //             dispatch(setUser(new_user));
-    //             console.log(new_user);
-    //           });
-    //         }
-    //       });
-    // console.log(user);
-
-    // fetch(`/properties/${id}`).then((r) => {
-    //   if (r.ok) {
-    //     r.json().then((new_property) =>
-    //       dispatch(setProperty(new_property))
-    //     );
-    //   }
-    // });
-
-    // fetch(`/tenants/${parsedValue.tenant_id}`).then((r) => {
-    //   if (r.ok) {
-    //     r.json().then((new_tenant) => dispatch(setTenant(new_tenant)));
-    //   }
-    // });
-    //     });
-    //   } else {
-    //     res.json().then((error) => {
-    //       console.log(error);
-    //     });
-    //   }
-    // });
   }
 
   return (
